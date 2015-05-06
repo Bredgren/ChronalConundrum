@@ -7,8 +7,8 @@ import (
 
 var (
 	document *js.Object
-	canvas *js.Object
-	gl *webgl.Context
+	canvas   *js.Object
+	gl       *webgl.Context
 )
 
 func initCanvas() {
