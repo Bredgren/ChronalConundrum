@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/go-gl/mathgl/mgl32"
 	"github.com/gopherjs/gopherjs/js"
 	"github.com/gopherjs/webgl"
-	"github.com/go-gl/mathgl/mgl32"
 )
 
 var (
@@ -66,10 +66,10 @@ func main() {
 
 var (
 	squareVerticesBuffer *js.Object
-	vPositionAttr int
-	perspectiveMatrix mgl32.Mat4
-	shaderProgram *js.Object
-	mvMatrix mgl32.Mat4
+	vPositionAttr        int
+	perspectiveMatrix    mgl32.Mat4
+	shaderProgram        *js.Object
+	mvMatrix             mgl32.Mat4
 )
 
 func initTest() {
@@ -97,7 +97,7 @@ func initTest() {
 	gl.ShaderSource(vertShader, vertSource)
 	gl.CompileShader(vertShader)
 	if !gl.GetShaderParameterb(vertShader, gl.COMPILE_STATUS) {
-		js.Global.Call("alert", "Error compiling vertex shaders: " + gl.GetShaderInfoLog(vertShader))
+		js.Global.Call("alert", "Error compiling vertex shaders: "+gl.GetShaderInfoLog(vertShader))
 		vertShader = nil
 	}
 
@@ -109,7 +109,7 @@ func initTest() {
 	gl.ShaderSource(fragShader, fragSource)
 	gl.CompileShader(fragShader)
 	if !gl.GetShaderParameterb(fragShader, gl.COMPILE_STATUS) {
-		js.Global.Call("alert", "Error compiling fragment shaders: " + gl.GetShaderInfoLog(fragShader))
+		js.Global.Call("alert", "Error compiling fragment shaders: "+gl.GetShaderInfoLog(fragShader))
 		fragShader = nil
 	}
 
@@ -134,7 +134,7 @@ func drawTest() {
 	gl.BindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer)
 	gl.VertexAttribPointer(vPositionAttr, 3, gl.FLOAT, false, 0, 0)
 
-	perspectiveMatrix = mgl32.Perspective(mgl32.DegToRad(45), 640.0 / 480.0, 0.1, 100.0)
+	perspectiveMatrix = mgl32.Perspective(mgl32.DegToRad(45), 640.0/480.0, 0.1, 100.0)
 
 	mvMatrix = mgl32.Ident4()
 	mvMatrix = mvMatrix.Mul4(mgl32.Translate3D(0.0, 0.0, -6.0))
