@@ -20809,7 +20809,7 @@ $packages["main"] = (function() {
 		canvas.width = width;
 		canvas.height = height;
 		gl.Viewport(0, 0, width, height);
-		gl.ClearColor(0, 0, 0, 1);
+		gl.ClearColor(0, 0, 0, 0);
 		gl.ClearDepth(1);
 		gl.Enable($parseInt(gl.Object.DEPTH_TEST) >> 0);
 		gl.DepthFunc($parseInt(gl.Object.LEQUAL) >> 0);
@@ -20869,7 +20869,7 @@ $packages["main"] = (function() {
 		gl.Clear(($parseInt(gl.Object.COLOR_BUFFER_BIT) >> 0) | ($parseInt(gl.Object.DEPTH_BUFFER_BIT) >> 0));
 		gl.BindBuffer($parseInt(gl.Object.ARRAY_BUFFER) >> 0, squareVerticesBuffer);
 		gl.VertexAttribPointer(vPositionAttr, 3, $parseInt(gl.Object.FLOAT) >> 0, false, 0, 0);
-		$copy(perspectiveMatrix, mgl32.Perspective(mgl32.DegToRad(45), 1.3333333730697632, 0.10000000149011612, 100), mgl32.Mat4);
+		$copy(perspectiveMatrix, mgl32.Perspective($pkg.VIEW_ANGLE, 0.6666666865348816, 0.10000000149011612, 100), mgl32.Mat4);
 		$copy(mvMatrix, mgl32.Ident4(), mgl32.Mat4);
 		$copy(mvMatrix, new mgl32.Mat4(mvMatrix).Mul4(mgl32.Translate3D(0, 0, -6)), mgl32.Mat4);
 		pUniform = gl.GetUniformLocation(shaderProgram, "uPMatrix");
@@ -20895,6 +20895,7 @@ $packages["main"] = (function() {
 		perspectiveMatrix = mgl32.Mat4.zero();
 		shaderProgram = null;
 		mvMatrix = mgl32.Mat4.zero();
+		$pkg.VIEW_ANGLE = mgl32.DegToRad(45);
 		main();
 		/* */ } return; } if ($f === undefined) { $f = { $blk: $init }; } $f.$s = $s; $f.$r = $r; return $f;
 	};

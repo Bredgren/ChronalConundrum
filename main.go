@@ -35,12 +35,12 @@ func initWebGl() {
 
 func onWindowResize() {
 	height := js.Global.Get("innerHeight").Int()
-	width := int(float64(height) * VIEW_RATIO)
+	width := int(float64(height) * WINDOW_RATIO)
 	canvas.Set("width", width)
 	canvas.Set("height", height)
 
 	gl.Viewport(0, 0, width, height)
-	gl.ClearColor(0.0, 0.0, 0.0, 1.0)
+	gl.ClearColor(0.0, 0.0, 0.0, 0.0)
 	gl.ClearDepth(1.0)
 	gl.Enable(gl.DEPTH_TEST)
 	gl.DepthFunc(gl.LEQUAL)
@@ -134,7 +134,7 @@ func drawTest() {
 	gl.BindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer)
 	gl.VertexAttribPointer(vPositionAttr, 3, gl.FLOAT, false, 0, 0)
 
-	perspectiveMatrix = mgl32.Perspective(mgl32.DegToRad(45), 640.0/480.0, 0.1, 100.0)
+	perspectiveMatrix = mgl32.Perspective(VIEW_ANGLE, WINDOW_RATIO, 0.1, 100.0)
 
 	mvMatrix = mgl32.Ident4()
 	mvMatrix = mvMatrix.Mul4(mgl32.Translate3D(0.0, 0.0, -6.0))
