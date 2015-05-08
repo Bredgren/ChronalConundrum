@@ -1,8 +1,8 @@
 package main
 
 import (
-	// "github.com/gopherjs/gopherjs/js"
-	// "github.com/gopherjs/webgl"
+// "github.com/gopherjs/gopherjs/js"
+// "github.com/gopherjs/webgl"
 )
 
 var (
@@ -14,16 +14,16 @@ var (
 type menuState struct {
 }
 
-func (s *menuState)	Name() string {
+func (s *menuState) Name() string {
 	return "menuState"
 }
 
-func (s *menuState)	OnEnter() {
+func (s *menuState) OnEnter() {
 	println("menuState.OnEnter")
 	println("not implemented")
 }
 
-func (s *menuState)	OnExit() {
+func (s *menuState) OnExit() {
 	println("menuState.OnExit")
 	println("not implemented")
 }

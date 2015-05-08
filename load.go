@@ -1,8 +1,8 @@
 package main
 
 import (
-	// "github.com/gopherjs/gopherjs/js"
-	// "github.com/gopherjs/webgl"
+// "github.com/gopherjs/gopherjs/js"
+// "github.com/gopherjs/webgl"
 )
 
 var (
@@ -14,16 +14,16 @@ var (
 type loadState struct {
 }
 
-func (s *loadState)	Name() string {
+func (s *loadState) Name() string {
 	return "loadState"
 }
 
-func (s *loadState)	OnEnter() {
+func (s *loadState) OnEnter() {
 	println("loadState.OnEnter")
 	println("not implemented")
 }
 
-func (s *loadState)	OnExit() {
+func (s *loadState) OnExit() {
 	println("loadState.OnExit")
 	println("not implemented")
 }

@@ -14,18 +14,18 @@ var (
 type initState struct {
 }
 
-func (s *initState)	Name() string {
+func (s *initState) Name() string {
 	return "initState"
 }
 
-func (s *initState)	OnEnter() {
+func (s *initState) OnEnter() {
 	println("initState.OnEnter")
 	document = js.Global.Get("document")
 	initCanvas()
 	initWebGl()
 }
 
-func (s *initState)	OnExit() {
+func (s *initState) OnExit() {
 	println("initState.OnExit")
 	println("not implemented")
 }

@@ -14,7 +14,7 @@ var (
 	gl       *webgl.Context
 	// mainSm is the overaching state machine for the game. Possible states are
 	// initState, loadState, menuState, playState
-	mainSm   *fsm.Fsm
+	mainSm *fsm.Fsm
 	// TODO: input
 )
 
@@ -32,11 +32,10 @@ func onWindowResize() {
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 }
 
-
 func mainLoop() {
 	currentState := mainSm.CurrentState.(mainState)
 	currentState.Update()
-	if (mainSm.CurrentState.(mainState) != currentState) {
+	if mainSm.CurrentState.(mainState) != currentState {
 		// We switched states in the update
 		currentState = mainSm.CurrentState.(mainState)
 		currentState.Update()
