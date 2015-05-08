@@ -1,37 +1,22 @@
 package main
 
 import (
+	"github.com/Bredgren/fsm"
 	"github.com/go-gl/mathgl/mgl32"
 	"github.com/gopherjs/gopherjs/js"
 	"github.com/gopherjs/webgl"
 )
 
+// Global state
 var (
 	document *js.Object
 	canvas   *js.Object
 	gl       *webgl.Context
+	// mainSm is the overaching state machine for the game. Possible states are
+	// initState, loadState, menuState, playState
+	mainSm   *fsm.Fsm
+	// TODO: input
 )
-
-func initCanvas() {
-	canvas = document.Call("createElement", "canvas")
-	canvas.Get("style").Set("margin", "auto")
-	canvas.Get("style").Set("display", "inherit")
-	document.Get("body").Call("appendChild", canvas)
-}
-
-func initWebGl() {
-	attrs := webgl.DefaultAttributes()
-	attrs.Alpha = false
-
-	glcontext, err := webgl.NewContext(canvas, attrs)
-	if err != nil {
-		js.Global.Call("alert", "Error: "+err.Error())
-	}
-	gl = glcontext
-
-	println(gl.GetParameter(gl.VERSION))
-	println(gl.GetParameter(gl.SHADING_LANGUAGE_VERSION))
-}
 
 func onWindowResize() {
 	height := js.Global.Get("innerHeight").Int()
@@ -47,14 +32,24 @@ func onWindowResize() {
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 }
 
+
+func mainLoop() {
+	currentState := mainSm.CurrentState.(mainState)
+	currentState.Update()
+	if (mainSm.CurrentState.(mainState) != currentState) {
+		// We switched states in the update
+		currentState = mainSm.CurrentState.(mainState)
+		currentState.Update()
+	}
+	currentState.Draw()
+}
+
 func onBodyLoad() {
-	document = js.Global.Get("document")
-	initCanvas()
-	initWebGl()
+	mainSm = fsm.NewFsm(mainInitState)
 	onWindowResize()
 
 	initTest()
-	js.Global.Call("requestAnimationFrame", drawTest)
+	js.Global.Call("requestAnimationFrame", mainLoop)
 }
 
 func main() {

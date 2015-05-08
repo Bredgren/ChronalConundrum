@@ -2186,6 +2186,52 @@ $packages["runtime"] = (function() {
 	$pkg.$init = $init;
 	return $pkg;
 })();
+$packages["github.com/Bredgren/fsm"] = (function() {
+	var $pkg = {}, $init, State, Fsm, ptrType, NewFsm;
+	State = $pkg.State = $newType(8, $kindInterface, "fsm.State", "State", "github.com/Bredgren/fsm", null);
+	Fsm = $pkg.Fsm = $newType(0, $kindStruct, "fsm.Fsm", "Fsm", "github.com/Bredgren/fsm", function(CurrentState_, PreviousState_) {
+		this.$val = this;
+		if (arguments.length === 0) {
+			this.CurrentState = $ifaceNil;
+			this.PreviousState = $ifaceNil;
+			return;
+		}
+		this.CurrentState = CurrentState_;
+		this.PreviousState = PreviousState_;
+	});
+	ptrType = $ptrType(Fsm);
+	NewFsm = function(initialState) {
+		var $ptr, fsm, initialState, $s, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; fsm = $f.fsm; initialState = $f.initialState; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+		fsm = [fsm];
+		fsm[0] = new Fsm.ptr(initialState, $ifaceNil);
+		$r = initialState.OnEnter(); /* */ $s = 1; case 1: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		return fsm[0];
+		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: NewFsm }; } $f.$ptr = $ptr; $f.fsm = fsm; $f.initialState = initialState; $f.$s = $s; $f.$r = $r; return $f;
+	};
+	$pkg.NewFsm = NewFsm;
+	Fsm.ptr.prototype.GotoState = function(state) {
+		var $ptr, f, state, $s, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; f = $f.f; state = $f.state; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+		f = this;
+		$r = f.CurrentState.OnExit(); /* */ $s = 1; case 1: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		f.PreviousState = f.CurrentState;
+		f.CurrentState = state;
+		$r = f.CurrentState.OnEnter(); /* */ $s = 2; case 2: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: Fsm.ptr.prototype.GotoState }; } $f.$ptr = $ptr; $f.f = f; $f.state = state; $f.$s = $s; $f.$r = $r; return $f;
+	};
+	Fsm.prototype.GotoState = function(state) { return this.$val.GotoState(state); };
+	ptrType.methods = [{prop: "GotoState", name: "GotoState", pkg: "", typ: $funcType([State], [], false)}];
+	State.init([{prop: "Name", name: "Name", pkg: "", typ: $funcType([], [$String], false)}, {prop: "OnEnter", name: "OnEnter", pkg: "", typ: $funcType([], [], false)}, {prop: "OnExit", name: "OnExit", pkg: "", typ: $funcType([], [], false)}]);
+	Fsm.init([{prop: "CurrentState", name: "CurrentState", pkg: "", typ: State, tag: ""}, {prop: "PreviousState", name: "PreviousState", pkg: "", typ: State, tag: ""}]);
+	$init = function() {
+		$pkg.$init = function() {};
+		/* */ var $f, $c = false, $s = 0, $r; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+		/* */ } return; } if ($f === undefined) { $f = { $blk: $init }; } $f.$s = $s; $f.$r = $r; return $f;
+	};
+	$pkg.$init = $init;
+	return $pkg;
+})();
 $packages["errors"] = (function() {
 	var $pkg = {}, $init, errorString, ptrType, New;
 	errorString = $pkg.errorString = $newType(0, $kindStruct, "errors.errorString", "errorString", "errors", function(s_) {
@@ -20770,16 +20816,76 @@ $packages["github.com/gopherjs/webgl"] = (function() {
 	return $pkg;
 })();
 $packages["main"] = (function() {
-	var $pkg = {}, $init, mgl32, js, webgl, ptrType, funcType, sliceType, arrayType, document, canvas, gl, squareVerticesBuffer, vPositionAttr, perspectiveMatrix, shaderProgram, mvMatrix, initCanvas, initWebGl, onWindowResize, onBodyLoad, main, initTest, drawTest;
+	var $pkg = {}, $init, fsm, mgl32, js, webgl, mainState, initState, loadState, menuState, ptrType, ptrType$1, funcType, sliceType, arrayType, ptrType$2, ptrType$3, ptrType$4, mainInitState, mainLoadState, document, canvas, gl, mainSm, squareVerticesBuffer, vPositionAttr, perspectiveMatrix, shaderProgram, mvMatrix, mainMenuState, initCanvas, initWebGl, onWindowResize, mainLoop, onBodyLoad, main, initTest, drawTest;
+	fsm = $packages["github.com/Bredgren/fsm"];
 	mgl32 = $packages["github.com/go-gl/mathgl/mgl32"];
 	js = $packages["github.com/gopherjs/gopherjs/js"];
 	webgl = $packages["github.com/gopherjs/webgl"];
+	mainState = $pkg.mainState = $newType(8, $kindInterface, "main.mainState", "mainState", "main", null);
+	initState = $pkg.initState = $newType(0, $kindStruct, "main.initState", "initState", "main", function() {
+		this.$val = this;
+		if (arguments.length === 0) {
+			return;
+		}
+	});
+	loadState = $pkg.loadState = $newType(0, $kindStruct, "main.loadState", "loadState", "main", function() {
+		this.$val = this;
+		if (arguments.length === 0) {
+			return;
+		}
+	});
+	menuState = $pkg.menuState = $newType(0, $kindStruct, "main.menuState", "menuState", "main", function() {
+		this.$val = this;
+		if (arguments.length === 0) {
+			return;
+		}
+	});
 	ptrType = $ptrType(webgl.Context);
+	ptrType$1 = $ptrType(fsm.Fsm);
 	funcType = $funcType([], [], false);
 	sliceType = $sliceType($Float32);
 	arrayType = $arrayType($Float32, 16);
+	ptrType$2 = $ptrType(initState);
+	ptrType$3 = $ptrType(loadState);
+	ptrType$4 = $ptrType(menuState);
+	initState.ptr.prototype.Name = function() {
+		var $ptr, s;
+		s = this;
+		return "initState";
+	};
+	initState.prototype.Name = function() { return this.$val.Name(); };
+	initState.ptr.prototype.OnEnter = function() {
+		var $ptr, s, $s, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; s = $f.s; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+		s = this;
+		console.log("initState.OnEnter");
+		document = $global.document;
+		initCanvas();
+		$r = initWebGl(); /* */ $s = 1; case 1: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: initState.ptr.prototype.OnEnter }; } $f.$ptr = $ptr; $f.s = s; $f.$s = $s; $f.$r = $r; return $f;
+	};
+	initState.prototype.OnEnter = function() { return this.$val.OnEnter(); };
+	initState.ptr.prototype.OnExit = function() {
+		var $ptr, s;
+		s = this;
+		console.log("initState.OnExit");
+		console.log("not implemented");
+	};
+	initState.prototype.OnExit = function() { return this.$val.OnExit(); };
+	initState.ptr.prototype.Update = function() {
+		var $ptr, s;
+		s = this;
+	};
+	initState.prototype.Update = function() { return this.$val.Update(); };
+	initState.ptr.prototype.Draw = function() {
+		var $ptr, s;
+		s = this;
+		drawTest();
+	};
+	initState.prototype.Draw = function() { return this.$val.Draw(); };
 	initCanvas = function() {
 		var $ptr;
+		console.log("initCanvas");
 		canvas = document.createElement($externalize("canvas", $String));
 		canvas.style.margin = $externalize("auto", $String);
 		canvas.style.display = $externalize("inherit", $String);
@@ -20788,6 +20894,7 @@ $packages["main"] = (function() {
 	initWebGl = function() {
 		var $ptr, _r, _tuple, attrs, err, glcontext, $s, $r;
 		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; _r = $f._r; _tuple = $f._tuple; attrs = $f.attrs; err = $f.err; glcontext = $f.glcontext; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+		console.log("initWebGl");
 		attrs = webgl.DefaultAttributes();
 		attrs.Alpha = false;
 		_tuple = webgl.NewContext(canvas, attrs); glcontext = _tuple[0]; err = _tuple[1];
@@ -20802,6 +20909,36 @@ $packages["main"] = (function() {
 		console.log(gl.GetParameter($parseInt(gl.Object.SHADING_LANGUAGE_VERSION) >> 0));
 		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: initWebGl }; } $f.$ptr = $ptr; $f._r = _r; $f._tuple = _tuple; $f.attrs = attrs; $f.err = err; $f.glcontext = glcontext; $f.$s = $s; $f.$r = $r; return $f;
 	};
+	loadState.ptr.prototype.Name = function() {
+		var $ptr, s;
+		s = this;
+		return "loadState";
+	};
+	loadState.prototype.Name = function() { return this.$val.Name(); };
+	loadState.ptr.prototype.OnEnter = function() {
+		var $ptr, s;
+		s = this;
+		console.log("loadState.OnEnter");
+		console.log("not implemented");
+	};
+	loadState.prototype.OnEnter = function() { return this.$val.OnEnter(); };
+	loadState.ptr.prototype.OnExit = function() {
+		var $ptr, s;
+		s = this;
+		console.log("loadState.OnExit");
+		console.log("not implemented");
+	};
+	loadState.prototype.OnExit = function() { return this.$val.OnExit(); };
+	loadState.ptr.prototype.Update = function() {
+		var $ptr, s;
+		s = this;
+	};
+	loadState.prototype.Update = function() { return this.$val.Update(); };
+	loadState.ptr.prototype.Draw = function() {
+		var $ptr, s;
+		s = this;
+	};
+	loadState.prototype.Draw = function() { return this.$val.Draw(); };
 	onWindowResize = function() {
 		var $ptr, height, width;
 		height = $parseInt($global.innerHeight) >> 0;
@@ -20815,16 +20952,29 @@ $packages["main"] = (function() {
 		gl.DepthFunc($parseInt(gl.Object.LEQUAL) >> 0);
 		gl.Clear(($parseInt(gl.Object.COLOR_BUFFER_BIT) >> 0) | ($parseInt(gl.Object.DEPTH_BUFFER_BIT) >> 0));
 	};
+	mainLoop = function() {
+		var $ptr, currentState, $s, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; currentState = $f.currentState; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+		currentState = $assertType(mainSm.CurrentState, mainState);
+		$r = currentState.Update(); /* */ $s = 1; case 1: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		/* */ if (!($interfaceIsEqual($assertType(mainSm.CurrentState, mainState), currentState))) { $s = 2; continue; }
+		/* */ $s = 3; continue;
+		/* if (!($interfaceIsEqual($assertType(mainSm.CurrentState, mainState), currentState))) { */ case 2:
+			currentState = $assertType(mainSm.CurrentState, mainState);
+			$r = currentState.Update(); /* */ $s = 4; case 4: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		/* } */ case 3:
+		$r = currentState.Draw(); /* */ $s = 5; case 5: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: mainLoop }; } $f.$ptr = $ptr; $f.currentState = currentState; $f.$s = $s; $f.$r = $r; return $f;
+	};
 	onBodyLoad = function() {
-		var $ptr, $s, $r;
-		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
-		document = $global.document;
-		initCanvas();
-		$r = initWebGl(); /* */ $s = 1; case 1: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		var $ptr, _r, $s, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; _r = $f._r; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+		_r = fsm.NewFsm(mainInitState); /* */ $s = 1; case 1: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
+		mainSm = _r;
 		onWindowResize();
 		initTest();
-		$global.requestAnimationFrame($externalize(drawTest, funcType));
-		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: onBodyLoad }; } $f.$ptr = $ptr; $f.$s = $s; $f.$r = $r; return $f;
+		$global.requestAnimationFrame($externalize(mainLoop, funcType));
+		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: onBodyLoad }; } $f.$ptr = $ptr; $f._r = _r; $f.$s = $s; $f.$r = $r; return $f;
 	};
 	main = function() {
 		var $ptr;
@@ -20881,21 +21031,63 @@ $packages["main"] = (function() {
 		gl.DrawArrays($parseInt(gl.Object.TRIANGLE_STRIP) >> 0, 0, 3);
 		$global.requestAnimationFrame($externalize(drawTest, funcType));
 	};
+	menuState.ptr.prototype.Name = function() {
+		var $ptr, s;
+		s = this;
+		return "menuState";
+	};
+	menuState.prototype.Name = function() { return this.$val.Name(); };
+	menuState.ptr.prototype.OnEnter = function() {
+		var $ptr, s;
+		s = this;
+		console.log("menuState.OnEnter");
+		console.log("not implemented");
+	};
+	menuState.prototype.OnEnter = function() { return this.$val.OnEnter(); };
+	menuState.ptr.prototype.OnExit = function() {
+		var $ptr, s;
+		s = this;
+		console.log("menuState.OnExit");
+		console.log("not implemented");
+	};
+	menuState.prototype.OnExit = function() { return this.$val.OnExit(); };
+	menuState.ptr.prototype.Update = function() {
+		var $ptr, s;
+		s = this;
+	};
+	menuState.prototype.Update = function() { return this.$val.Update(); };
+	menuState.ptr.prototype.Draw = function() {
+		var $ptr, s;
+		s = this;
+	};
+	menuState.prototype.Draw = function() { return this.$val.Draw(); };
+	ptrType$2.methods = [{prop: "Name", name: "Name", pkg: "", typ: $funcType([], [$String], false)}, {prop: "OnEnter", name: "OnEnter", pkg: "", typ: $funcType([], [], false)}, {prop: "OnExit", name: "OnExit", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([], [], false)}, {prop: "Draw", name: "Draw", pkg: "", typ: $funcType([], [], false)}];
+	ptrType$3.methods = [{prop: "Name", name: "Name", pkg: "", typ: $funcType([], [$String], false)}, {prop: "OnEnter", name: "OnEnter", pkg: "", typ: $funcType([], [], false)}, {prop: "OnExit", name: "OnExit", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([], [], false)}, {prop: "Draw", name: "Draw", pkg: "", typ: $funcType([], [], false)}];
+	ptrType$4.methods = [{prop: "Name", name: "Name", pkg: "", typ: $funcType([], [$String], false)}, {prop: "OnEnter", name: "OnEnter", pkg: "", typ: $funcType([], [], false)}, {prop: "OnExit", name: "OnExit", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([], [], false)}, {prop: "Draw", name: "Draw", pkg: "", typ: $funcType([], [], false)}];
+	mainState.init([{prop: "Draw", name: "Draw", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([], [], false)}]);
+	initState.init([]);
+	loadState.init([]);
+	menuState.init([]);
 	$init = function() {
 		$pkg.$init = function() {};
 		/* */ var $f, $c = false, $s = 0, $r; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
-		$r = mgl32.$init(); /* */ $s = 1; case 1: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
-		$r = js.$init(); /* */ $s = 2; case 2: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
-		$r = webgl.$init(); /* */ $s = 3; case 3: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		$r = fsm.$init(); /* */ $s = 1; case 1: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		$r = mgl32.$init(); /* */ $s = 2; case 2: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		$r = js.$init(); /* */ $s = 3; case 3: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		$r = webgl.$init(); /* */ $s = 4; case 4: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 		document = null;
 		canvas = null;
 		gl = ptrType.nil;
+		mainSm = ptrType$1.nil;
 		squareVerticesBuffer = null;
 		vPositionAttr = 0;
 		perspectiveMatrix = mgl32.Mat4.zero();
 		shaderProgram = null;
 		mvMatrix = mgl32.Mat4.zero();
 		$pkg.VIEW_ANGLE = mgl32.DegToRad(45);
+		mainInitState = new initState.ptr();
+		mainLoadState = new loadState.ptr();
+		mainMenuState = new menuState.ptr();
 		main();
 		/* */ } return; } if ($f === undefined) { $f = { $blk: $init }; } $f.$s = $s; $f.$r = $r; return $f;
 	};
