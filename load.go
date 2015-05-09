@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gopherjs/gopherjs/js"
-// "github.com/gopherjs/webgl"
+	// "github.com/gopherjs/webgl"
 )
 
 var (
@@ -12,7 +12,7 @@ var (
 
 // The state for loading the game's assets. Implements fsm.State and mainState.
 type loadState struct {
-	totalAssets int
+	totalAssets  int
 	assetsLoaded int
 }
 
@@ -58,9 +58,8 @@ func (s *loadState) Update() {
 func (s *loadState) Draw() {
 }
 
-
 type shaderAsset struct {
-	spec shaderSpec
+	spec   shaderSpec
 	shader **js.Object
 }
 

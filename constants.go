@@ -14,7 +14,6 @@ var (
 	VIEW_ANGLE = mgl32.DegToRad(VIEW_DEGREES)
 )
 
-
 // Assets
 
 type shaderSpec struct {
@@ -24,5 +23,5 @@ type shaderSpec struct {
 
 var (
 	TEST_SHADER_FILE = shaderSpec{"test.vert", "test.frag"}
-	testShader *js.Object
+	testShader       *js.Object
 )
