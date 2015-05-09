@@ -20,7 +20,7 @@ func (s *menuState) Name() string {
 
 func (s *menuState) OnEnter() {
 	println("menuState.OnEnter")
-	println("not implemented")
+	initTest()
 }
 
 func (s *menuState) OnExit() {
@@ -32,4 +32,5 @@ func (s *menuState) Update() {
 }
 
 func (s *menuState) Draw() {
+	drawTest()
 }

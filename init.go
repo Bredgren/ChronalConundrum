@@ -31,10 +31,12 @@ func (s *initState) OnExit() {
 }
 
 func (s *initState) Update() {
+	// Must do this here instead of the end of OnEnter because mainSm isn't initalized
+	mainSm.GotoState(mainLoadState)
 }
 
 func (s *initState) Draw() {
-	drawTest()
+	// Don't need to draw anything
 }
 
 func initCanvas() {

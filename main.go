@@ -41,13 +41,14 @@ func mainLoop() {
 		currentState.Update()
 	}
 	currentState.Draw()
+
+	js.Global.Call("requestAnimationFrame", mainLoop)
 }
 
 func onBodyLoad() {
 	mainSm = fsm.NewFsm(mainInitState)
 	onWindowResize()
 
-	initTest()
 	js.Global.Call("requestAnimationFrame", mainLoop)
 }
 
@@ -62,11 +63,11 @@ var (
 	squareVerticesBuffer *js.Object
 	vPositionAttr        int
 	perspectiveMatrix    mgl32.Mat4
-	shaderProgram        *js.Object
 	mvMatrix             mgl32.Mat4
 )
 
 func initTest() {
+	println("initTest")
 	squareVerticesBuffer = gl.CreateBuffer()
 	gl.BindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer)
 
@@ -78,47 +79,9 @@ func initTest() {
 
 	gl.BufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW)
 
-	vertSource := `
-		attribute vec3 aVertexPosition;
+	gl.UseProgram(testShader)
 
-		uniform mat4 uMVMatrix;
-		uniform mat4 uPMatrix;
-
-		void main(void) {
-		  gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-		}`
-	var vertShader *js.Object = gl.CreateShader(gl.VERTEX_SHADER)
-	gl.ShaderSource(vertShader, vertSource)
-	gl.CompileShader(vertShader)
-	if !gl.GetShaderParameterb(vertShader, gl.COMPILE_STATUS) {
-		js.Global.Call("alert", "Error compiling vertex shaders: "+gl.GetShaderInfoLog(vertShader))
-		vertShader = nil
-	}
-
-	fragSource := `
-		void main(void) {
-  		gl_FragColor = vec4(0.5, 1.0, 1.0, 1.0);
-		}`
-	var fragShader *js.Object = gl.CreateShader(gl.FRAGMENT_SHADER)
-	gl.ShaderSource(fragShader, fragSource)
-	gl.CompileShader(fragShader)
-	if !gl.GetShaderParameterb(fragShader, gl.COMPILE_STATUS) {
-		js.Global.Call("alert", "Error compiling fragment shaders: "+gl.GetShaderInfoLog(fragShader))
-		fragShader = nil
-	}
-
-	shaderProgram = gl.CreateProgram()
-	gl.AttachShader(shaderProgram, vertShader)
-	gl.AttachShader(shaderProgram, fragShader)
-	gl.LinkProgram(shaderProgram)
-
-	if !gl.GetProgramParameterb(shaderProgram, gl.LINK_STATUS) {
-		js.Global.Call("alert", "Unable to initialize the shader program.")
-	}
-
-	gl.UseProgram(shaderProgram)
-
-	vPositionAttr = gl.GetAttribLocation(shaderProgram, "aVertexPosition")
+	vPositionAttr = gl.GetAttribLocation(testShader, "aVertexPosition")
 	gl.EnableVertexAttribArray(vPositionAttr)
 }
 
@@ -133,11 +96,11 @@ func drawTest() {
 	mvMatrix = mgl32.Ident4()
 	mvMatrix = mvMatrix.Mul4(mgl32.Translate3D(0.0, 0.0, -6.0))
 
-	var pUniform *js.Object = gl.GetUniformLocation(shaderProgram, "uPMatrix")
+	var pUniform *js.Object = gl.GetUniformLocation(testShader, "uPMatrix")
 	pm := [16]float32(perspectiveMatrix)
 	gl.UniformMatrix4fv(pUniform, false, pm[:])
 
-	var mvUniform *js.Object = gl.GetUniformLocation(shaderProgram, "uMVMatrix")
+	var mvUniform *js.Object = gl.GetUniformLocation(testShader, "uMVMatrix")
 	mvm := [16]float32(mvMatrix)
 	gl.UniformMatrix4fv(mvUniform, false, mvm[:])
 
