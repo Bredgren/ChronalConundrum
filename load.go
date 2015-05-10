@@ -59,7 +59,6 @@ func (s *loadState) Draw() {
 	println("loading... ", percent, "%")
 }
 
-
 func loadShaderAsset(done chan<- string, asset *shaderAsset) {
 	// TODO: cache files if more than one program needs the same shader
 	vert := make(chan string)
@@ -96,13 +95,13 @@ func loadShaderAsset(done chan<- string, asset *shaderAsset) {
 	println("send for", asset.fragFile)
 	xmlHttp2.Call("send")
 
-	vertSource := <- vert
+	vertSource := <-vert
 	if vertSource == "" {
 		mainFailedState.reason = "Failed to load asset " + asset.vertFile
 		mainSm.GotoState(mainFailedState)
 		return
 	}
-	fragSource := <- frag
+	fragSource := <-frag
 	if fragSource == "" {
 		mainFailedState.reason = "Failed to load asset " + asset.fragFile
 		mainSm.GotoState(mainFailedState)

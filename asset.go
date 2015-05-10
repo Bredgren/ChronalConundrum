@@ -6,8 +6,8 @@ import (
 
 // Shaders
 var (
-	testShader *js.Object
-	tmpShader  *js.Object
+	testShader   *js.Object
+	tmpShader    *js.Object
 	shaderAssets = []shaderAsset{
 		{"test.vert", "test.frag", &testShader},
 		// {"tmp.vert", "tmp.frag", &tmpShader},
@@ -17,7 +17,7 @@ var (
 type shaderAsset struct {
 	vertFile string
 	fragFile string
-	shader **js.Object
+	shader   **js.Object
 }
 
 // Textures

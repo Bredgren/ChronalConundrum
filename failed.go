@@ -18,7 +18,7 @@ func (s *failedState) Name() string {
 
 func (s *failedState) OnEnter() {
 	println("failedState.OnEnter")
-	js.Global.Call("alert", "Oh dear, the game seems to have failed.\n\nReason:\n" + s.reason)
+	js.Global.Call("alert", "Oh dear, the game seems to have failed.\n\nReason:\n"+s.reason)
 	failed = true
 }
 
