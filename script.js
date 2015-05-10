@@ -20816,20 +20816,30 @@ $packages["github.com/gopherjs/webgl"] = (function() {
 	return $pkg;
 })();
 $packages["main"] = (function() {
-	var $pkg = {}, $init, fsm, mgl32, js, webgl, shaderSpec, mainState, initState, loadState, shaderAsset, menuState, ptrType, ptrType$1, sliceType, ptrType$2, ptrType$3, funcType, sliceType$1, arrayType, ptrType$4, ptrType$5, ptrType$6, testShader, testShader_ptr, mainInitState, mainLoadState, document, canvas, gl, mainSm, squareVerticesBuffer, vPositionAttr, perspectiveMatrix, mvMatrix, mainMenuState, initCanvas, initWebGl, loadShaderAsset, onWindowResize, mainLoop, onBodyLoad, main, initTest, drawTest;
+	var $pkg = {}, $init, fsm, mgl32, js, webgl, shaderAsset, failedState, mainState, initState, loadState, menuState, ptrType, ptrType$1, sliceType, ptrType$2, ptrType$3, chanType, funcType, sliceType$1, arrayType, ptrType$4, ptrType$5, ptrType$6, ptrType$7, testShader, testShader_ptr, shaderAssets, mainFailedState, mainInitState, mainLoadState, document, canvas, gl, failed, mainSm, squareVerticesBuffer, vPositionAttr, perspectiveMatrix, mvMatrix, mainMenuState, initCanvas, initWebGl, loadShaderAsset, onWindowResize, mainLoop, onBodyLoad, main, initTest, drawTest;
 	fsm = $packages["github.com/Bredgren/fsm"];
 	mgl32 = $packages["github.com/go-gl/mathgl/mgl32"];
 	js = $packages["github.com/gopherjs/gopherjs/js"];
 	webgl = $packages["github.com/gopherjs/webgl"];
-	shaderSpec = $pkg.shaderSpec = $newType(0, $kindStruct, "main.shaderSpec", "shaderSpec", "main", function(vertFile_, fragFile_) {
+	shaderAsset = $pkg.shaderAsset = $newType(0, $kindStruct, "main.shaderAsset", "shaderAsset", "main", function(vertFile_, fragFile_, shader_) {
 		this.$val = this;
 		if (arguments.length === 0) {
 			this.vertFile = "";
 			this.fragFile = "";
+			this.shader = ptrType$3.nil;
 			return;
 		}
 		this.vertFile = vertFile_;
 		this.fragFile = fragFile_;
+		this.shader = shader_;
+	});
+	failedState = $pkg.failedState = $newType(0, $kindStruct, "main.failedState", "failedState", "main", function(reason_) {
+		this.$val = this;
+		if (arguments.length === 0) {
+			this.reason = "";
+			return;
+		}
+		this.reason = reason_;
 	});
 	mainState = $pkg.mainState = $newType(8, $kindInterface, "main.mainState", "mainState", "main", null);
 	initState = $pkg.initState = $newType(0, $kindStruct, "main.initState", "initState", "main", function() {
@@ -20838,25 +20848,17 @@ $packages["main"] = (function() {
 			return;
 		}
 	});
-	loadState = $pkg.loadState = $newType(0, $kindStruct, "main.loadState", "loadState", "main", function(totalAssets_, assetsLoaded_) {
+	loadState = $pkg.loadState = $newType(0, $kindStruct, "main.loadState", "loadState", "main", function(totalAssets_, assetsLoaded_, loadChannel_) {
 		this.$val = this;
 		if (arguments.length === 0) {
 			this.totalAssets = 0;
 			this.assetsLoaded = 0;
+			this.loadChannel = chanType.nil;
 			return;
 		}
 		this.totalAssets = totalAssets_;
 		this.assetsLoaded = assetsLoaded_;
-	});
-	shaderAsset = $pkg.shaderAsset = $newType(0, $kindStruct, "main.shaderAsset", "shaderAsset", "main", function(spec_, shader_) {
-		this.$val = this;
-		if (arguments.length === 0) {
-			this.spec = new shaderSpec.ptr();
-			this.shader = ptrType$3.nil;
-			return;
-		}
-		this.spec = spec_;
-		this.shader = shader_;
+		this.loadChannel = loadChannel_;
 	});
 	menuState = $pkg.menuState = $newType(0, $kindStruct, "main.menuState", "menuState", "main", function() {
 		this.$val = this;
@@ -20869,12 +20871,44 @@ $packages["main"] = (function() {
 	sliceType = $sliceType(shaderAsset);
 	ptrType$2 = $ptrType(js.Object);
 	ptrType$3 = $ptrType(ptrType$2);
+	chanType = $chanType($String, false, false);
 	funcType = $funcType([], [], false);
 	sliceType$1 = $sliceType($Float32);
 	arrayType = $arrayType($Float32, 16);
-	ptrType$4 = $ptrType(initState);
-	ptrType$5 = $ptrType(loadState);
-	ptrType$6 = $ptrType(menuState);
+	ptrType$4 = $ptrType(failedState);
+	ptrType$5 = $ptrType(initState);
+	ptrType$6 = $ptrType(loadState);
+	ptrType$7 = $ptrType(menuState);
+	failedState.ptr.prototype.Name = function() {
+		var $ptr, s;
+		s = this;
+		return "failedState";
+	};
+	failedState.prototype.Name = function() { return this.$val.Name(); };
+	failedState.ptr.prototype.OnEnter = function() {
+		var $ptr, s;
+		s = this;
+		console.log("failedState.OnEnter");
+		$global.alert($externalize("Oh dear, the game seems to have failed.\n\nReason:\n" + s.reason, $String));
+		failed = true;
+	};
+	failedState.prototype.OnEnter = function() { return this.$val.OnEnter(); };
+	failedState.ptr.prototype.OnExit = function() {
+		var $ptr, s;
+		s = this;
+		console.log("failedState.OnExit");
+	};
+	failedState.prototype.OnExit = function() { return this.$val.OnExit(); };
+	failedState.ptr.prototype.Update = function() {
+		var $ptr, s;
+		s = this;
+	};
+	failedState.prototype.Update = function() { return this.$val.Update(); };
+	failedState.ptr.prototype.Draw = function() {
+		var $ptr, s;
+		s = this;
+	};
+	failedState.prototype.Draw = function() { return this.$val.Draw(); };
 	initState.ptr.prototype.Name = function() {
 		var $ptr, s;
 		s = this;
@@ -20945,17 +20979,17 @@ $packages["main"] = (function() {
 	};
 	loadState.prototype.Name = function() { return this.$val.Name(); };
 	loadState.ptr.prototype.OnEnter = function() {
-		var $ptr, _i, _ref, asset, s, shaderAssets;
+		var $ptr, _i, _ref, asset, s;
 		s = this;
 		console.log("loadState.OnEnter");
-		shaderAssets = new sliceType([new shaderAsset.ptr($clone($pkg.TEST_SHADER_FILE, shaderSpec), (testShader_ptr || (testShader_ptr = new ptrType$3(function() { return testShader; }, function($v) { testShader = $v; }))))]);
+		s.loadChannel = new chanType(0);
 		s.totalAssets = shaderAssets.$length;
 		_ref = shaderAssets;
 		_i = 0;
 		while (true) {
 			if (!(_i < _ref.$length)) { break; }
 			asset = $clone(((_i < 0 || _i >= _ref.$length) ? $throwRuntimeError("index out of range") : _ref.$array[_ref.$offset + _i]), shaderAsset);
-			loadShaderAsset(s, asset);
+			$go(loadShaderAsset, [s.loadChannel, asset]);
 			_i++;
 		}
 	};
@@ -20964,32 +20998,105 @@ $packages["main"] = (function() {
 		var $ptr, s;
 		s = this;
 		console.log("loadState.OnExit");
-		console.log("not implemented");
+		$close(s.loadChannel);
 	};
 	loadState.prototype.OnExit = function() { return this.$val.OnExit(); };
 	loadState.ptr.prototype.Update = function() {
-		var $ptr, percent, s, $s, $r;
-		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; percent = $f.percent; s = $f.s; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+		var $ptr, _selection, loaded, s, $s, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; _selection = $f._selection; loaded = $f.loaded; s = $f.s; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
 		s = this;
-		percent = s.assetsLoaded / s.totalAssets * 100;
-		console.log("loading... ", percent, "%");
+		_selection = $select([[s.loadChannel], []]);
+		if (_selection[0] === 0) {
+			loaded = _selection[1][0];
+			console.log("loaded", loaded);
+			s.assetsLoaded = s.assetsLoaded + (1) >> 0;
+		}
 		/* */ if (s.assetsLoaded === s.totalAssets) { $s = 1; continue; }
 		/* */ $s = 2; continue;
 		/* if (s.assetsLoaded === s.totalAssets) { */ case 1:
 			$r = mainSm.GotoState(mainMenuState); /* */ $s = 3; case 3: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 			return;
 		/* } */ case 2:
-		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: loadState.ptr.prototype.Update }; } $f.$ptr = $ptr; $f.percent = percent; $f.s = s; $f.$s = $s; $f.$r = $r; return $f;
+		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: loadState.ptr.prototype.Update }; } $f.$ptr = $ptr; $f._selection = _selection; $f.loaded = loaded; $f.s = s; $f.$s = $s; $f.$r = $r; return $f;
 	};
 	loadState.prototype.Update = function() { return this.$val.Update(); };
 	loadState.ptr.prototype.Draw = function() {
-		var $ptr, s;
+		var $ptr, percent, s;
 		s = this;
+		percent = s.assetsLoaded / s.totalAssets * 100;
+		console.log("loading... ", percent, "%");
 	};
 	loadState.prototype.Draw = function() { return this.$val.Draw(); };
-	loadShaderAsset = function(s, asset) {
-		var $ptr, asset, fragShader, fragSource, s, shader, vertShader, vertSource;
-		vertSource = "\n\t\tattribute vec3 aVertexPosition;\n\n\t\tuniform mat4 uMVMatrix;\n\t\tuniform mat4 uPMatrix;\n\n\t\tvoid main(void) {\n\t\t  gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);\n\t\t}";
+	loadShaderAsset = function(done, asset) {
+		var $ptr, _arg, _arg$1, _r, _r$1, asset, done, frag, fragShader, fragSource, shader, vert, vertShader, vertSource, xmlHttp, xmlHttp2, $s, $deferred, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; _arg = $f._arg; _arg$1 = $f._arg$1; _r = $f._r; _r$1 = $f._r$1; asset = $f.asset; done = $f.done; frag = $f.frag; fragShader = $f.fragShader; fragSource = $f.fragSource; shader = $f.shader; vert = $f.vert; vertShader = $f.vertShader; vertSource = $f.vertSource; xmlHttp = $f.xmlHttp; xmlHttp2 = $f.xmlHttp2; $s = $f.$s; $deferred = $f.$deferred; $r = $f.$r; } var $err = null; try { s: while (true) { switch ($s) { case 0: $deferred = []; $deferred.index = $curGoroutine.deferStack.length; $curGoroutine.deferStack.push($deferred);
+		frag = [frag];
+		vert = [vert];
+		xmlHttp = [xmlHttp];
+		xmlHttp2 = [xmlHttp2];
+		vert[0] = new chanType(0);
+		$deferred.push([function(_arg) { $close(_arg); }, [vert[0]]]);
+		frag[0] = new chanType(0);
+		$deferred.push([function(_arg$1) { $close(_arg$1); }, [frag[0]]]);
+		xmlHttp[0] = new ($global.XMLHttpRequest)();
+		xmlHttp[0].open($externalize("GET", $String), $externalize(asset.vertFile, $String), $externalize(true, $Bool));
+		xmlHttp[0].onload = $externalize((function(frag, vert, xmlHttp, xmlHttp2) { return function() {
+			var $ptr;
+			$go((function(frag, vert, xmlHttp, xmlHttp2) { return function $b() {
+				var $ptr, vertText, $s, $r;
+				/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; vertText = $f.vertText; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+				/* */ if ((($parseInt(xmlHttp[0].readyState) >> 0) === 4) && (($parseInt(xmlHttp[0].status) >> 0) === 200)) { $s = 1; continue; }
+				/* */ $s = 2; continue;
+				/* if ((($parseInt(xmlHttp[0].readyState) >> 0) === 4) && (($parseInt(xmlHttp[0].status) >> 0) === 200)) { */ case 1:
+					vertText = $internalize(xmlHttp[0].responseText, $String);
+					$r = $send(vert[0], vertText); /* */ $s = 4; case 4: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+					$s = 3; continue;
+				/* } else { */ case 2:
+					$r = $send(vert[0], ""); /* */ $s = 5; case 5: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+				/* } */ case 3:
+				/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: $b }; } $f.$ptr = $ptr; $f.vertText = vertText; $f.$s = $s; $f.$r = $r; return $f;
+			}; })(frag, vert, xmlHttp, xmlHttp2), []);
+		}; })(frag, vert, xmlHttp, xmlHttp2), funcType);
+		xmlHttp[0].send();
+		xmlHttp2[0] = new ($global.XMLHttpRequest)();
+		xmlHttp2[0].open($externalize("GET", $String), $externalize(asset.fragFile, $String), $externalize(true, $Bool));
+		xmlHttp2[0].onload = $externalize((function(frag, vert, xmlHttp, xmlHttp2) { return function() {
+			var $ptr;
+			$go((function(frag, vert, xmlHttp, xmlHttp2) { return function $b() {
+				var $ptr, fragText, $s, $r;
+				/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; fragText = $f.fragText; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+				/* */ if ((($parseInt(xmlHttp2[0].readyState) >> 0) === 4) && (($parseInt(xmlHttp2[0].status) >> 0) === 200)) { $s = 1; continue; }
+				/* */ $s = 2; continue;
+				/* if ((($parseInt(xmlHttp2[0].readyState) >> 0) === 4) && (($parseInt(xmlHttp2[0].status) >> 0) === 200)) { */ case 1:
+					fragText = $internalize(xmlHttp2[0].responseText, $String);
+					$r = $send(frag[0], fragText); /* */ $s = 4; case 4: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+					$s = 3; continue;
+				/* } else { */ case 2:
+					$r = $send(frag[0], ""); /* */ $s = 5; case 5: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+				/* } */ case 3:
+				/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: $b }; } $f.$ptr = $ptr; $f.fragText = fragText; $f.$s = $s; $f.$r = $r; return $f;
+			}; })(frag, vert, xmlHttp, xmlHttp2), []);
+		}; })(frag, vert, xmlHttp, xmlHttp2), funcType);
+		console.log("send for", asset.fragFile);
+		xmlHttp2[0].send();
+		_r = $recv(vert[0]); /* */ $s = 1; case 1: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
+		vertSource = _r[0];
+		/* */ if (vertSource === "") { $s = 2; continue; }
+		/* */ $s = 3; continue;
+		/* if (vertSource === "") { */ case 2:
+			mainFailedState.reason = "Failed to load asset " + asset.vertFile;
+			$r = mainSm.GotoState(mainFailedState); /* */ $s = 4; case 4: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+			return;
+		/* } */ case 3:
+		_r$1 = $recv(frag[0]); /* */ $s = 5; case 5: if($c) { $c = false; _r$1 = _r$1.$blk(); } if (_r$1 && _r$1.$blk !== undefined) { break s; }
+		fragSource = _r$1[0];
+		/* */ if (fragSource === "") { $s = 6; continue; }
+		/* */ $s = 7; continue;
+		/* if (fragSource === "") { */ case 6:
+			mainFailedState.reason = "Failed to load asset " + asset.fragFile;
+			$r = mainSm.GotoState(mainFailedState); /* */ $s = 8; case 8: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+			return;
+		/* } */ case 7:
 		vertShader = gl.CreateShader($parseInt(gl.Object.VERTEX_SHADER) >> 0);
 		gl.ShaderSource(vertShader, vertSource);
 		gl.CompileShader(vertShader);
@@ -20997,7 +21104,6 @@ $packages["main"] = (function() {
 			$global.alert($externalize("Error compiling vertex shaders: " + gl.GetShaderInfoLog(vertShader), $String));
 			vertShader = null;
 		}
-		fragSource = "\n\t\tvoid main(void) {\n  \t\tgl_FragColor = vec4(0.5, 1.0, 1.0, 1.0);\n\t\t}";
 		fragShader = gl.CreateShader($parseInt(gl.Object.FRAGMENT_SHADER) >> 0);
 		gl.ShaderSource(fragShader, fragSource);
 		gl.CompileShader(fragShader);
@@ -21013,7 +21119,8 @@ $packages["main"] = (function() {
 			$global.alert($externalize("Unable to initialize the shader program.", $String));
 		}
 		asset.shader.$set(shader);
-		s.assetsLoaded = s.assetsLoaded + (1) >> 0;
+		$r = $send(done, asset.vertFile + " " + asset.fragFile); /* */ $s = 9; case 9: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		/* */ $s = -1; case -1: } return; } } catch(err) { $err = err; $s = -1; } finally { $callDeferred($deferred, $err); if($curGoroutine.asleep) { if ($f === undefined) { $f = { $blk: loadShaderAsset }; } $f.$ptr = $ptr; $f._arg = _arg; $f._arg$1 = _arg$1; $f._r = _r; $f._r$1 = _r$1; $f.asset = asset; $f.done = done; $f.frag = frag; $f.fragShader = fragShader; $f.fragSource = fragSource; $f.shader = shader; $f.vert = vert; $f.vertShader = vertShader; $f.vertSource = vertSource; $f.xmlHttp = xmlHttp; $f.xmlHttp2 = xmlHttp2; $f.$s = $s; $f.$deferred = $deferred; $f.$r = $r; return $f; } }
 	};
 	onWindowResize = function() {
 		var $ptr, height, width;
@@ -21040,7 +21147,9 @@ $packages["main"] = (function() {
 			$r = currentState.Update(); /* */ $s = 4; case 4: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 		/* } */ case 3:
 		$r = currentState.Draw(); /* */ $s = 5; case 5: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
-		$global.requestAnimationFrame($externalize(mainLoop, funcType));
+		if (!failed) {
+			$global.requestAnimationFrame($externalize(mainLoop, funcType));
+		}
 		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: mainLoop }; } $f.$ptr = $ptr; $f.currentState = currentState; $f.$s = $s; $f.$r = $r; return $f;
 	};
 	onBodyLoad = function() {
@@ -21119,11 +21228,12 @@ $packages["main"] = (function() {
 	ptrType$4.methods = [{prop: "Name", name: "Name", pkg: "", typ: $funcType([], [$String], false)}, {prop: "OnEnter", name: "OnEnter", pkg: "", typ: $funcType([], [], false)}, {prop: "OnExit", name: "OnExit", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([], [], false)}, {prop: "Draw", name: "Draw", pkg: "", typ: $funcType([], [], false)}];
 	ptrType$5.methods = [{prop: "Name", name: "Name", pkg: "", typ: $funcType([], [$String], false)}, {prop: "OnEnter", name: "OnEnter", pkg: "", typ: $funcType([], [], false)}, {prop: "OnExit", name: "OnExit", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([], [], false)}, {prop: "Draw", name: "Draw", pkg: "", typ: $funcType([], [], false)}];
 	ptrType$6.methods = [{prop: "Name", name: "Name", pkg: "", typ: $funcType([], [$String], false)}, {prop: "OnEnter", name: "OnEnter", pkg: "", typ: $funcType([], [], false)}, {prop: "OnExit", name: "OnExit", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([], [], false)}, {prop: "Draw", name: "Draw", pkg: "", typ: $funcType([], [], false)}];
-	shaderSpec.init([{prop: "vertFile", name: "vertFile", pkg: "main", typ: $String, tag: ""}, {prop: "fragFile", name: "fragFile", pkg: "main", typ: $String, tag: ""}]);
+	ptrType$7.methods = [{prop: "Name", name: "Name", pkg: "", typ: $funcType([], [$String], false)}, {prop: "OnEnter", name: "OnEnter", pkg: "", typ: $funcType([], [], false)}, {prop: "OnExit", name: "OnExit", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([], [], false)}, {prop: "Draw", name: "Draw", pkg: "", typ: $funcType([], [], false)}];
+	shaderAsset.init([{prop: "vertFile", name: "vertFile", pkg: "main", typ: $String, tag: ""}, {prop: "fragFile", name: "fragFile", pkg: "main", typ: $String, tag: ""}, {prop: "shader", name: "shader", pkg: "main", typ: ptrType$3, tag: ""}]);
+	failedState.init([{prop: "reason", name: "reason", pkg: "main", typ: $String, tag: ""}]);
 	mainState.init([{prop: "Draw", name: "Draw", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([], [], false)}]);
 	initState.init([]);
-	loadState.init([{prop: "totalAssets", name: "totalAssets", pkg: "main", typ: $Int, tag: ""}, {prop: "assetsLoaded", name: "assetsLoaded", pkg: "main", typ: $Int, tag: ""}]);
-	shaderAsset.init([{prop: "spec", name: "spec", pkg: "main", typ: shaderSpec, tag: ""}, {prop: "shader", name: "shader", pkg: "main", typ: ptrType$3, tag: ""}]);
+	loadState.init([{prop: "totalAssets", name: "totalAssets", pkg: "main", typ: $Int, tag: ""}, {prop: "assetsLoaded", name: "assetsLoaded", pkg: "main", typ: $Int, tag: ""}, {prop: "loadChannel", name: "loadChannel", pkg: "main", typ: chanType, tag: ""}]);
 	menuState.init([]);
 	$init = function() {
 		$pkg.$init = function() {};
@@ -21141,10 +21251,12 @@ $packages["main"] = (function() {
 		vPositionAttr = 0;
 		perspectiveMatrix = mgl32.Mat4.zero();
 		mvMatrix = mgl32.Mat4.zero();
+		shaderAssets = new sliceType([new shaderAsset.ptr("test.vert", "test.frag", (testShader_ptr || (testShader_ptr = new ptrType$3(function() { return testShader; }, function($v) { testShader = $v; }))))]);
 		$pkg.VIEW_ANGLE = mgl32.DegToRad(45);
-		$pkg.TEST_SHADER_FILE = new shaderSpec.ptr("test.vert", "test.frag");
+		mainFailedState = new failedState.ptr();
 		mainInitState = new initState.ptr();
 		mainLoadState = new loadState.ptr();
+		failed = false;
 		mainMenuState = new menuState.ptr();
 		main();
 		/* */ } return; } if ($f === undefined) { $f = { $blk: $init }; } $f.$s = $s; $f.$r = $r; return $f;

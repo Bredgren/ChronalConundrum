@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/gopherjs/gopherjs/js"
-	// "github.com/gopherjs/webgl"
 )
 
 var (
@@ -14,6 +13,7 @@ var (
 type loadState struct {
 	totalAssets  int
 	assetsLoaded int
+	loadChannel  chan string
 }
 
 func (s *loadState) Name() string {
@@ -23,31 +23,30 @@ func (s *loadState) Name() string {
 func (s *loadState) OnEnter() {
 	println("loadState.OnEnter")
 
-	shaderAssets := []shaderAsset{
-		shaderAsset{TEST_SHADER_FILE, &testShader},
-	}
+	s.loadChannel = make(chan string)
+
 	s.totalAssets = len(shaderAssets)
-
-	// textureAssets := []textureAsset{...}
 	// s.totalAssets += len(textureAssets)
-
-	// soundAssets := []soundAsset{...}
 	// s.totalAssets += len(soundAssets)
+	// s.totalAssets += len(modelAssets)
 
 	for _, asset := range shaderAssets {
-		// TODO asyncronous
-		loadShaderAsset(s, &asset)
+		go loadShaderAsset(s.loadChannel, &asset)
 	}
 }
 
 func (s *loadState) OnExit() {
 	println("loadState.OnExit")
-	println("not implemented")
+	close(s.loadChannel)
 }
 
 func (s *loadState) Update() {
-	percent := float64(s.assetsLoaded) / float64(s.totalAssets) * 100.0
-	println("loading... ", percent, "%")
+	select {
+	case loaded := <-s.loadChannel:
+		println("loaded", loaded)
+		s.assetsLoaded += 1
+	default:
+	}
 
 	if s.assetsLoaded == s.totalAssets {
 		mainSm.GotoState(mainMenuState)
@@ -56,24 +55,60 @@ func (s *loadState) Update() {
 }
 
 func (s *loadState) Draw() {
+	percent := float64(s.assetsLoaded) / float64(s.totalAssets) * 100.0
+	println("loading... ", percent, "%")
 }
 
-type shaderAsset struct {
-	spec   shaderSpec
-	shader **js.Object
-}
 
-func loadShaderAsset(s *loadState, asset *shaderAsset) {
-	// TODO load from files
-	vertSource := `
-		attribute vec3 aVertexPosition;
+func loadShaderAsset(done chan<- string, asset *shaderAsset) {
+	// TODO: cache files if more than one program needs the same shader
+	vert := make(chan string)
+	defer close(vert)
+	frag := make(chan string)
+	defer close(frag)
 
-		uniform mat4 uMVMatrix;
-		uniform mat4 uPMatrix;
+	var xmlHttp *js.Object = js.Global.Get("XMLHttpRequest").New()
+	xmlHttp.Call("open", "GET", asset.vertFile, true)
+	xmlHttp.Set("onload", func() {
+		go func() {
+			if xmlHttp.Get("readyState").Int() == 4 && xmlHttp.Get("status").Int() == 200 {
+				vertText := xmlHttp.Get("responseText").String()
+				vert <- vertText
+			} else {
+				vert <- ""
+			}
+		}()
+	})
+	xmlHttp.Call("send")
 
-		void main(void) {
-		  gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-		}`
+	var xmlHttp2 *js.Object = js.Global.Get("XMLHttpRequest").New()
+	xmlHttp2.Call("open", "GET", asset.fragFile, true)
+	xmlHttp2.Set("onload", func() {
+		go func() {
+			if xmlHttp2.Get("readyState").Int() == 4 && xmlHttp2.Get("status").Int() == 200 {
+				fragText := xmlHttp2.Get("responseText").String()
+				frag <- fragText
+			} else {
+				frag <- ""
+			}
+		}()
+	})
+	println("send for", asset.fragFile)
+	xmlHttp2.Call("send")
+
+	vertSource := <- vert
+	if vertSource == "" {
+		mainFailedState.reason = "Failed to load asset " + asset.vertFile
+		mainSm.GotoState(mainFailedState)
+		return
+	}
+	fragSource := <- frag
+	if fragSource == "" {
+		mainFailedState.reason = "Failed to load asset " + asset.fragFile
+		mainSm.GotoState(mainFailedState)
+		return
+	}
+
 	var vertShader *js.Object = gl.CreateShader(gl.VERTEX_SHADER)
 	gl.ShaderSource(vertShader, vertSource)
 	gl.CompileShader(vertShader)
@@ -82,10 +117,6 @@ func loadShaderAsset(s *loadState, asset *shaderAsset) {
 		vertShader = nil
 	}
 
-	fragSource := `
-		void main(void) {
-  		gl_FragColor = vec4(0.5, 1.0, 1.0, 1.0);
-		}`
 	var fragShader *js.Object = gl.CreateShader(gl.FRAGMENT_SHADER)
 	gl.ShaderSource(fragShader, fragSource)
 	gl.CompileShader(fragShader)
@@ -104,5 +135,7 @@ func loadShaderAsset(s *loadState, asset *shaderAsset) {
 	}
 
 	*asset.shader = shader
-	s.assetsLoaded += 1
+	// TODO: exception is thrown about sending to closed channel because this triggers
+	//       the loadState to exit
+	done <- asset.vertFile + " " + asset.fragFile
 }
