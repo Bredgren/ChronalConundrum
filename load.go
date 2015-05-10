@@ -62,38 +62,13 @@ func (s *loadState) Draw() {
 func loadShaderAsset(done chan<- string, asset *shaderAsset) {
 	// TODO: cache files if more than one program needs the same shader
 	vert := make(chan string)
-	defer close(vert)
 	frag := make(chan string)
+
+	defer close(vert)
 	defer close(frag)
 
-	var xmlHttp *js.Object = js.Global.Get("XMLHttpRequest").New()
-	xmlHttp.Call("open", "GET", asset.vertFile, true)
-	xmlHttp.Set("onload", func() {
-		go func() {
-			if xmlHttp.Get("readyState").Int() == 4 && xmlHttp.Get("status").Int() == 200 {
-				vertText := xmlHttp.Get("responseText").String()
-				vert <- vertText
-			} else {
-				vert <- ""
-			}
-		}()
-	})
-	xmlHttp.Call("send")
-
-	var xmlHttp2 *js.Object = js.Global.Get("XMLHttpRequest").New()
-	xmlHttp2.Call("open", "GET", asset.fragFile, true)
-	xmlHttp2.Set("onload", func() {
-		go func() {
-			if xmlHttp2.Get("readyState").Int() == 4 && xmlHttp2.Get("status").Int() == 200 {
-				fragText := xmlHttp2.Get("responseText").String()
-				frag <- fragText
-			} else {
-				frag <- ""
-			}
-		}()
-	})
-	println("send for", asset.fragFile)
-	xmlHttp2.Call("send")
+	retrieveFile(asset.vertFile, vert)
+	retrieveFile(asset.fragFile, frag)
 
 	vertSource := <-vert
 	if vertSource == "" {
