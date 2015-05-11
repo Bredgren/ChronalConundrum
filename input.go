@@ -14,8 +14,8 @@ type inputType struct {
 }
 
 type mouse struct {
-	pos mgl32.Vec2
-	leftDown bool
+	pos       mgl32.Vec2
+	leftDown  bool
 	rightDown bool
 }
 
