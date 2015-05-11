@@ -20816,7 +20816,7 @@ $packages["github.com/gopherjs/webgl"] = (function() {
 	return $pkg;
 })();
 $packages["main"] = (function() {
-	var $pkg = {}, $init, fsm, mgl32, js, webgl, shaderAsset, failedState, mainState, initState, loadState, menuState, ptrType, ptrType$1, sliceType, ptrType$2, ptrType$3, funcType, chanType, sliceType$1, arrayType, ptrType$4, ptrType$5, ptrType$6, ptrType$7, testShader, testShader_ptr, shaderAssets, mainFailedState, mainInitState, mainLoadState, document, canvas, gl, failed, mainSm, squareVerticesBuffer, vPositionAttr, perspectiveMatrix, mvMatrix, mainMenuState, retrieveFile, initCanvas, initWebGl, loadShaderAsset, onWindowResize, mainLoop, onBodyLoad, main, initTest, drawTest;
+	var $pkg = {}, $init, fsm, mgl32, js, webgl, shaderAsset, failedState, mainState, initState, loadState, menuState, ptrType, ptrType$1, sliceType, ptrType$2, ptrType$3, funcType, chanType, sliceType$1, arrayType, ptrType$4, ptrType$5, ptrType$6, ptrType$7, testShader, testShader_ptr, shaderAssets, mainFailedState, mainInitState, mainLoadState, document, canvas, gl, failed, mainSm, squareVerticesBuffer, vPositionAttr, perspectiveMatrix, mvMatrix, mainMenuState, retrieveFile, fail, initCanvas, initWebGl, onWindowResize, mainLoop, onBodyLoad, main, initTest, drawTest, createShader, loadShaderAsset;
 	fsm = $packages["github.com/Bredgren/fsm"];
 	mgl32 = $packages["github.com/go-gl/mathgl/mgl32"];
 	js = $packages["github.com/gopherjs/gopherjs/js"];
@@ -20932,6 +20932,13 @@ $packages["main"] = (function() {
 		s = this;
 	};
 	failedState.prototype.Draw = function() { return this.$val.Draw(); };
+	fail = function(message) {
+		var $ptr, message, $s, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; message = $f.message; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+		mainFailedState.reason = message;
+		$r = mainSm.GotoState(mainFailedState); /* */ $s = 1; case 1: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: fail }; } $f.$ptr = $ptr; $f.message = message; $f.$s = $s; $f.$r = $r; return $f;
+	};
 	initState.ptr.prototype.Name = function() {
 		var $ptr, s;
 		s = this;
@@ -21012,7 +21019,7 @@ $packages["main"] = (function() {
 		while (true) {
 			if (!(_i < _ref.$length)) { break; }
 			asset = $clone(((_i < 0 || _i >= _ref.$length) ? $throwRuntimeError("index out of range") : _ref.$array[_ref.$offset + _i]), shaderAsset);
-			$go(loadShaderAsset, [s.loadChannel, asset]);
+			$go(loadShaderAsset, [asset, s.loadChannel]);
 			_i++;
 		}
 	};
@@ -21050,58 +21057,6 @@ $packages["main"] = (function() {
 		console.log("loading... ", percent, "%");
 	};
 	loadState.prototype.Draw = function() { return this.$val.Draw(); };
-	loadShaderAsset = function(done, asset) {
-		var $ptr, _arg, _arg$1, _r, _r$1, asset, done, frag, fragShader, fragSource, shader, vert, vertShader, vertSource, $s, $deferred, $r;
-		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; _arg = $f._arg; _arg$1 = $f._arg$1; _r = $f._r; _r$1 = $f._r$1; asset = $f.asset; done = $f.done; frag = $f.frag; fragShader = $f.fragShader; fragSource = $f.fragSource; shader = $f.shader; vert = $f.vert; vertShader = $f.vertShader; vertSource = $f.vertSource; $s = $f.$s; $deferred = $f.$deferred; $r = $f.$r; } var $err = null; try { s: while (true) { switch ($s) { case 0: $deferred = []; $deferred.index = $curGoroutine.deferStack.length; $curGoroutine.deferStack.push($deferred);
-		vert = new chanType(0);
-		frag = new chanType(0);
-		$deferred.push([function(_arg) { $close(_arg); }, [vert]]);
-		$deferred.push([function(_arg$1) { $close(_arg$1); }, [frag]]);
-		retrieveFile(asset.vertFile, vert);
-		retrieveFile(asset.fragFile, frag);
-		_r = $recv(vert); /* */ $s = 1; case 1: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
-		vertSource = _r[0];
-		/* */ if (vertSource === "") { $s = 2; continue; }
-		/* */ $s = 3; continue;
-		/* if (vertSource === "") { */ case 2:
-			mainFailedState.reason = "Failed to load asset " + asset.vertFile;
-			$r = mainSm.GotoState(mainFailedState); /* */ $s = 4; case 4: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
-			return;
-		/* } */ case 3:
-		_r$1 = $recv(frag); /* */ $s = 5; case 5: if($c) { $c = false; _r$1 = _r$1.$blk(); } if (_r$1 && _r$1.$blk !== undefined) { break s; }
-		fragSource = _r$1[0];
-		/* */ if (fragSource === "") { $s = 6; continue; }
-		/* */ $s = 7; continue;
-		/* if (fragSource === "") { */ case 6:
-			mainFailedState.reason = "Failed to load asset " + asset.fragFile;
-			$r = mainSm.GotoState(mainFailedState); /* */ $s = 8; case 8: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
-			return;
-		/* } */ case 7:
-		vertShader = gl.CreateShader($parseInt(gl.Object.VERTEX_SHADER) >> 0);
-		gl.ShaderSource(vertShader, vertSource);
-		gl.CompileShader(vertShader);
-		if (!gl.GetShaderParameterb(vertShader, $parseInt(gl.Object.COMPILE_STATUS) >> 0)) {
-			$global.alert($externalize("Error compiling vertex shaders: " + gl.GetShaderInfoLog(vertShader), $String));
-			vertShader = null;
-		}
-		fragShader = gl.CreateShader($parseInt(gl.Object.FRAGMENT_SHADER) >> 0);
-		gl.ShaderSource(fragShader, fragSource);
-		gl.CompileShader(fragShader);
-		if (!gl.GetShaderParameterb(fragShader, $parseInt(gl.Object.COMPILE_STATUS) >> 0)) {
-			$global.alert($externalize("Error compiling fragment shaders: " + gl.GetShaderInfoLog(fragShader), $String));
-			fragShader = null;
-		}
-		shader = gl.CreateProgram();
-		gl.AttachShader(shader, vertShader);
-		gl.AttachShader(shader, fragShader);
-		gl.LinkProgram(shader);
-		if (!gl.GetProgramParameterb(shader, $parseInt(gl.Object.LINK_STATUS) >> 0)) {
-			$global.alert($externalize("Unable to initialize the shader program.", $String));
-		}
-		asset.shader.$set(shader);
-		$r = $send(done, asset.vertFile + " " + asset.fragFile); /* */ $s = 9; case 9: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
-		/* */ $s = -1; case -1: } return; } } catch(err) { $err = err; $s = -1; } finally { $callDeferred($deferred, $err); if($curGoroutine.asleep) { if ($f === undefined) { $f = { $blk: loadShaderAsset }; } $f.$ptr = $ptr; $f._arg = _arg; $f._arg$1 = _arg$1; $f._r = _r; $f._r$1 = _r$1; $f.asset = asset; $f.done = done; $f.frag = frag; $f.fragShader = fragShader; $f.fragSource = fragSource; $f.shader = shader; $f.vert = vert; $f.vertShader = vertShader; $f.vertSource = vertSource; $f.$s = $s; $f.$deferred = $deferred; $f.$r = $r; return $f; } }
-	};
 	onWindowResize = function() {
 		var $ptr, height, width;
 		height = $parseInt($global.innerHeight) >> 0;
@@ -21205,6 +21160,64 @@ $packages["main"] = (function() {
 		drawTest();
 	};
 	menuState.prototype.Draw = function() { return this.$val.Draw(); };
+	createShader = function(source, kind) {
+		var $ptr, kind, shader, source, $s, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; kind = $f.kind; shader = $f.shader; source = $f.source; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+		shader = gl.CreateShader(kind);
+		gl.ShaderSource(shader, source);
+		gl.CompileShader(shader);
+		/* */ if (!gl.GetShaderParameterb(shader, $parseInt(gl.Object.COMPILE_STATUS) >> 0)) { $s = 1; continue; }
+		/* */ $s = 2; continue;
+		/* if (!gl.GetShaderParameterb(shader, $parseInt(gl.Object.COMPILE_STATUS) >> 0)) { */ case 1:
+			$r = fail("Error compiling shader: " + gl.GetShaderInfoLog(shader)); /* */ $s = 3; case 3: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+			return null;
+		/* } */ case 2:
+		return shader;
+		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: createShader }; } $f.$ptr = $ptr; $f.kind = kind; $f.shader = shader; $f.source = source; $f.$s = $s; $f.$r = $r; return $f;
+	};
+	loadShaderAsset = function(asset, done) {
+		var $ptr, _arg, _arg$1, _r, _r$1, _r$2, _r$3, asset, done, frag, fragShader, fragSource, shader, vert, vertShader, vertSource, $s, $deferred, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; _arg = $f._arg; _arg$1 = $f._arg$1; _r = $f._r; _r$1 = $f._r$1; _r$2 = $f._r$2; _r$3 = $f._r$3; asset = $f.asset; done = $f.done; frag = $f.frag; fragShader = $f.fragShader; fragSource = $f.fragSource; shader = $f.shader; vert = $f.vert; vertShader = $f.vertShader; vertSource = $f.vertSource; $s = $f.$s; $deferred = $f.$deferred; $r = $f.$r; } var $err = null; try { s: while (true) { switch ($s) { case 0: $deferred = []; $deferred.index = $curGoroutine.deferStack.length; $curGoroutine.deferStack.push($deferred);
+		vert = new chanType(0);
+		frag = new chanType(0);
+		$deferred.push([function(_arg) { $close(_arg); }, [vert]]);
+		$deferred.push([function(_arg$1) { $close(_arg$1); }, [frag]]);
+		retrieveFile(asset.vertFile, vert);
+		retrieveFile(asset.fragFile, frag);
+		_r = $recv(vert); /* */ $s = 1; case 1: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
+		vertSource = _r[0];
+		/* */ if (vertSource === "") { $s = 2; continue; }
+		/* */ $s = 3; continue;
+		/* if (vertSource === "") { */ case 2:
+			$r = fail("Failed to load asset " + asset.vertFile); /* */ $s = 4; case 4: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+			return;
+		/* } */ case 3:
+		_r$1 = $recv(frag); /* */ $s = 5; case 5: if($c) { $c = false; _r$1 = _r$1.$blk(); } if (_r$1 && _r$1.$blk !== undefined) { break s; }
+		fragSource = _r$1[0];
+		/* */ if (fragSource === "") { $s = 6; continue; }
+		/* */ $s = 7; continue;
+		/* if (fragSource === "") { */ case 6:
+			$r = fail("Failed to load asset " + asset.fragFile); /* */ $s = 8; case 8: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+			return;
+		/* } */ case 7:
+		_r$2 = createShader(vertSource, $parseInt(gl.Object.VERTEX_SHADER) >> 0); /* */ $s = 9; case 9: if($c) { $c = false; _r$2 = _r$2.$blk(); } if (_r$2 && _r$2.$blk !== undefined) { break s; }
+		vertShader = _r$2;
+		_r$3 = createShader(fragSource, $parseInt(gl.Object.FRAGMENT_SHADER) >> 0); /* */ $s = 10; case 10: if($c) { $c = false; _r$3 = _r$3.$blk(); } if (_r$3 && _r$3.$blk !== undefined) { break s; }
+		fragShader = _r$3;
+		shader = gl.CreateProgram();
+		gl.AttachShader(shader, vertShader);
+		gl.AttachShader(shader, fragShader);
+		gl.LinkProgram(shader);
+		/* */ if (!gl.GetProgramParameterb(shader, $parseInt(gl.Object.LINK_STATUS) >> 0)) { $s = 11; continue; }
+		/* */ $s = 12; continue;
+		/* if (!gl.GetProgramParameterb(shader, $parseInt(gl.Object.LINK_STATUS) >> 0)) { */ case 11:
+			$r = fail("Unable to initiaize shader program"); /* */ $s = 13; case 13: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+			return;
+		/* } */ case 12:
+		asset.shader.$set(shader);
+		$r = $send(done, asset.vertFile + " " + asset.fragFile); /* */ $s = 14; case 14: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		/* */ $s = -1; case -1: } return; } } catch(err) { $err = err; $s = -1; } finally { $callDeferred($deferred, $err); if($curGoroutine.asleep) { if ($f === undefined) { $f = { $blk: loadShaderAsset }; } $f.$ptr = $ptr; $f._arg = _arg; $f._arg$1 = _arg$1; $f._r = _r; $f._r$1 = _r$1; $f._r$2 = _r$2; $f._r$3 = _r$3; $f.asset = asset; $f.done = done; $f.frag = frag; $f.fragShader = fragShader; $f.fragSource = fragSource; $f.shader = shader; $f.vert = vert; $f.vertShader = vertShader; $f.vertSource = vertSource; $f.$s = $s; $f.$deferred = $deferred; $f.$r = $r; return $f; } }
+	};
 	ptrType$4.methods = [{prop: "Name", name: "Name", pkg: "", typ: $funcType([], [$String], false)}, {prop: "OnEnter", name: "OnEnter", pkg: "", typ: $funcType([], [], false)}, {prop: "OnExit", name: "OnExit", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([], [], false)}, {prop: "Draw", name: "Draw", pkg: "", typ: $funcType([], [], false)}];
 	ptrType$5.methods = [{prop: "Name", name: "Name", pkg: "", typ: $funcType([], [$String], false)}, {prop: "OnEnter", name: "OnEnter", pkg: "", typ: $funcType([], [], false)}, {prop: "OnExit", name: "OnExit", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([], [], false)}, {prop: "Draw", name: "Draw", pkg: "", typ: $funcType([], [], false)}];
 	ptrType$6.methods = [{prop: "Name", name: "Name", pkg: "", typ: $funcType([], [$String], false)}, {prop: "OnEnter", name: "OnEnter", pkg: "", typ: $funcType([], [], false)}, {prop: "OnExit", name: "OnExit", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([], [], false)}, {prop: "Draw", name: "Draw", pkg: "", typ: $funcType([], [], false)}];

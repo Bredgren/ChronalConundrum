@@ -31,3 +31,8 @@ func (s *failedState) Update() {
 
 func (s *failedState) Draw() {
 }
+
+func fail(message string) {
+	mainFailedState.reason = message
+	mainSm.GotoState(mainFailedState)
+}
