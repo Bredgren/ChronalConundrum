@@ -29,6 +29,7 @@ func (s *menuState) OnExit() {
 }
 
 func (s *menuState) Update() {
+	println(input.mouse.leftDown, input.mouse.rightDown)
 }
 
 func (s *menuState) Draw() {

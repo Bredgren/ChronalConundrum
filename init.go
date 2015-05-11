@@ -23,6 +23,14 @@ func (s *initState) OnEnter() {
 	document = js.Global.Get("document")
 	initCanvas()
 	initWebGl()
+
+	canvas.Call("addEventListener", "mousemove", onMouseMove)
+	canvas.Call("addEventListener", "mousedown", onMouseDown)
+	canvas.Call("addEventListener", "mouseup", onMouseUp)
+	// TODO: disable context menu
+	// canvas.Call("addEventListener", "oncontextmenu", func(e *js.Object) {
+	// 	e.Call("preventDefault")
+	// })
 }
 
 func (s *initState) OnExit() {

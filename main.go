@@ -12,11 +12,9 @@ var (
 	document *js.Object
 	canvas   *js.Object
 	gl       *webgl.Context
-	failed   bool = false
-	// mainSm is the overaching state machine for the game. Possible states are
-	// initState, loadState, menuState, playState
+	// mainSm is the overarching state machine for the game. Possible states are
+	// initState, loadState, menuState, playState, failedState
 	mainSm *fsm.Fsm
-	// TODO: input
 )
 
 func onWindowResize() {
@@ -43,7 +41,7 @@ func mainLoop() {
 	}
 	currentState.Draw()
 
-	if !failed {
+	if currentState != mainFailedState {
 		js.Global.Call("requestAnimationFrame", mainLoop)
 	}
 }

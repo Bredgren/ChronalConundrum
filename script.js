@@ -20816,7 +20816,7 @@ $packages["github.com/gopherjs/webgl"] = (function() {
 	return $pkg;
 })();
 $packages["main"] = (function() {
-	var $pkg = {}, $init, fsm, mgl32, js, webgl, shaderAsset, failedState, mainState, initState, loadState, menuState, ptrType, ptrType$1, sliceType, ptrType$2, ptrType$3, funcType, chanType, sliceType$1, arrayType, ptrType$4, ptrType$5, ptrType$6, ptrType$7, testShader, testShader_ptr, shaderAssets, mainFailedState, mainInitState, mainLoadState, document, canvas, gl, failed, mainSm, squareVerticesBuffer, vPositionAttr, perspectiveMatrix, mvMatrix, mainMenuState, retrieveFile, fail, initCanvas, initWebGl, onWindowResize, mainLoop, onBodyLoad, main, initTest, drawTest, createShader, loadShaderAsset;
+	var $pkg = {}, $init, fsm, mgl32, js, webgl, shaderAsset, failedState, mainState, initState, inputType, mouse, loadState, menuState, ptrType, ptrType$1, sliceType, ptrType$2, ptrType$3, funcType, funcType$1, chanType, sliceType$1, arrayType, ptrType$4, ptrType$5, ptrType$6, ptrType$7, testShader, testShader_ptr, shaderAssets, mainFailedState, mainInitState, input, mainLoadState, document, canvas, gl, mainSm, squareVerticesBuffer, vPositionAttr, perspectiveMatrix, mvMatrix, mainMenuState, retrieveFile, fail, initCanvas, initWebGl, onMouseMove, onMouseDown, onMouseUp, onWindowResize, mainLoop, onBodyLoad, main, initTest, drawTest, createShader, loadShaderAsset;
 	fsm = $packages["github.com/Bredgren/fsm"];
 	mgl32 = $packages["github.com/go-gl/mathgl/mgl32"];
 	js = $packages["github.com/gopherjs/gopherjs/js"];
@@ -20848,6 +20848,26 @@ $packages["main"] = (function() {
 			return;
 		}
 	});
+	inputType = $pkg.inputType = $newType(0, $kindStruct, "main.inputType", "inputType", "main", function(mouse_) {
+		this.$val = this;
+		if (arguments.length === 0) {
+			this.mouse = new mouse.ptr();
+			return;
+		}
+		this.mouse = mouse_;
+	});
+	mouse = $pkg.mouse = $newType(0, $kindStruct, "main.mouse", "mouse", "main", function(pos_, leftDown_, rightDown_) {
+		this.$val = this;
+		if (arguments.length === 0) {
+			this.pos = mgl32.Vec2.zero();
+			this.leftDown = false;
+			this.rightDown = false;
+			return;
+		}
+		this.pos = pos_;
+		this.leftDown = leftDown_;
+		this.rightDown = rightDown_;
+	});
 	loadState = $pkg.loadState = $newType(0, $kindStruct, "main.loadState", "loadState", "main", function(totalAssets_, assetsLoaded_, loadChannel_) {
 		this.$val = this;
 		if (arguments.length === 0) {
@@ -20872,6 +20892,7 @@ $packages["main"] = (function() {
 	ptrType$2 = $ptrType(js.Object);
 	ptrType$3 = $ptrType(ptrType$2);
 	funcType = $funcType([], [], false);
+	funcType$1 = $funcType([ptrType$2], [], false);
 	chanType = $chanType($String, false, false);
 	sliceType$1 = $sliceType($Float32);
 	arrayType = $arrayType($Float32, 16);
@@ -20913,7 +20934,6 @@ $packages["main"] = (function() {
 		s = this;
 		console.log("failedState.OnEnter");
 		$global.alert($externalize("Oh dear, the game seems to have failed.\n\nReason:\n" + s.reason, $String));
-		failed = true;
 	};
 	failedState.prototype.OnEnter = function() { return this.$val.OnEnter(); };
 	failedState.ptr.prototype.OnExit = function() {
@@ -20953,6 +20973,13 @@ $packages["main"] = (function() {
 		document = $global.document;
 		initCanvas();
 		$r = initWebGl(); /* */ $s = 1; case 1: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		canvas.addEventListener($externalize("mousemove", $String), $externalize(onMouseMove, funcType$1));
+		canvas.addEventListener($externalize("mousedown", $String), $externalize(onMouseDown, funcType$1));
+		canvas.addEventListener($externalize("mouseup", $String), $externalize(onMouseUp, funcType$1));
+		canvas.addEventListener($externalize("oncontextmenu", $String), $externalize((function(e) {
+			var $ptr, e;
+			e.preventDefault();
+		}), funcType$1));
 		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: initState.ptr.prototype.OnEnter }; } $f.$ptr = $ptr; $f.s = s; $f.$s = $s; $f.$r = $r; return $f;
 	};
 	initState.prototype.OnEnter = function() { return this.$val.OnEnter(); };
@@ -21001,6 +21028,30 @@ $packages["main"] = (function() {
 		console.log(gl.GetParameter($parseInt(gl.Object.VERSION) >> 0));
 		console.log(gl.GetParameter($parseInt(gl.Object.SHADING_LANGUAGE_VERSION) >> 0));
 		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: initWebGl }; } $f.$ptr = $ptr; $f._r = _r; $f._tuple = _tuple; $f.attrs = attrs; $f.err = err; $f.glcontext = glcontext; $f.$s = $s; $f.$r = $r; return $f;
+	};
+	onMouseMove = function(event) {
+		var $ptr, event, layer;
+		layer = $toNativeArray($kindFloat32, [($parseInt(event.layerX) >> 0), ($parseInt(event.layerY) >> 0)]);
+		$copy(input.mouse.pos, layer, mgl32.Vec2);
+	};
+	onMouseDown = function(event) {
+		var $ptr, button, event;
+		console.log(event);
+		button = $parseInt(event.which) >> 0;
+		if (button === 1) {
+			input.mouse.leftDown = true;
+		} else if (button === 3) {
+			input.mouse.rightDown = true;
+		}
+	};
+	onMouseUp = function(event) {
+		var $ptr, button, event;
+		button = $parseInt(event.which) >> 0;
+		if (button === 1) {
+			input.mouse.leftDown = false;
+		} else if (button === 2) {
+			input.mouse.rightDown = false;
+		}
 	};
 	loadState.ptr.prototype.Name = function() {
 		var $ptr, s;
@@ -21082,7 +21133,7 @@ $packages["main"] = (function() {
 			$r = currentState.Update(); /* */ $s = 4; case 4: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 		/* } */ case 3:
 		$r = currentState.Draw(); /* */ $s = 5; case 5: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
-		if (!failed) {
+		if (!($interfaceIsEqual(currentState, mainFailedState))) {
 			$global.requestAnimationFrame($externalize(mainLoop, funcType));
 		}
 		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: mainLoop }; } $f.$ptr = $ptr; $f.currentState = currentState; $f.$s = $s; $f.$r = $r; return $f;
@@ -21152,6 +21203,7 @@ $packages["main"] = (function() {
 	menuState.ptr.prototype.Update = function() {
 		var $ptr, s;
 		s = this;
+		console.log(input.mouse.leftDown, input.mouse.rightDown);
 	};
 	menuState.prototype.Update = function() { return this.$val.Update(); };
 	menuState.ptr.prototype.Draw = function() {
@@ -21226,6 +21278,8 @@ $packages["main"] = (function() {
 	failedState.init([{prop: "reason", name: "reason", pkg: "main", typ: $String, tag: ""}]);
 	mainState.init([{prop: "Draw", name: "Draw", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([], [], false)}]);
 	initState.init([]);
+	inputType.init([{prop: "mouse", name: "", pkg: "main", typ: mouse, tag: ""}]);
+	mouse.init([{prop: "pos", name: "pos", pkg: "main", typ: mgl32.Vec2, tag: ""}, {prop: "leftDown", name: "leftDown", pkg: "main", typ: $Bool, tag: ""}, {prop: "rightDown", name: "rightDown", pkg: "main", typ: $Bool, tag: ""}]);
 	loadState.init([{prop: "totalAssets", name: "totalAssets", pkg: "main", typ: $Int, tag: ""}, {prop: "assetsLoaded", name: "assetsLoaded", pkg: "main", typ: $Int, tag: ""}, {prop: "loadChannel", name: "loadChannel", pkg: "main", typ: chanType, tag: ""}]);
 	menuState.init([]);
 	$init = function() {
@@ -21248,8 +21302,8 @@ $packages["main"] = (function() {
 		$pkg.VIEW_ANGLE = mgl32.DegToRad(45);
 		mainFailedState = new failedState.ptr();
 		mainInitState = new initState.ptr();
+		input = new inputType.ptr();
 		mainLoadState = new loadState.ptr();
-		failed = false;
 		mainMenuState = new menuState.ptr();
 		main();
 		/* */ } return; } if ($f === undefined) { $f = { $blk: $init }; } $f.$s = $s; $f.$r = $r; return $f;
