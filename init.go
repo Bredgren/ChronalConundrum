@@ -24,13 +24,6 @@ func (s *initState) OnEnter() {
 	initCanvas()
 	initWebGl()
 
-	canvas.Call("addEventListener", "mousemove", onMouseMove)
-	canvas.Call("addEventListener", "mousedown", onMouseDown)
-	canvas.Call("addEventListener", "mouseup", onMouseUp)
-	// TODO: disable context menu
-	// canvas.Call("addEventListener", "oncontextmenu", func(e *js.Object) {
-	// 	e.Call("preventDefault")
-	// })
 }
 
 func (s *initState) OnExit() {
@@ -52,6 +45,10 @@ func initCanvas() {
 	canvas = document.Call("createElement", "canvas")
 	canvas.Get("style").Set("margin", "auto")
 	canvas.Get("style").Set("display", "inherit")
+	canvas.Call("addEventListener", "mousemove", onMouseMove)
+	canvas.Call("addEventListener", "mousedown", onMouseDown)
+	canvas.Call("addEventListener", "mouseup", onMouseUp)
+	canvas.Set("oncontextmenu", func () bool { return false })
 	document.Get("body").Call("appendChild", canvas)
 }
 

@@ -5,6 +5,11 @@ import (
 	"github.com/gopherjs/gopherjs/js"
 )
 
+const (
+	LEFT_BUTTON = 0
+	RIGHT_BUTTON = 2
+)
+
 var (
 	input = new(inputType)
 )
@@ -52,20 +57,19 @@ func onMouseMove(event *js.Object) {
 }
 
 func onMouseDown(event *js.Object) {
-	println(event)
-	button := event.Get("which").Int()
-	if button == 1 {
+	button := event.Get("button").Int()
+	if button == LEFT_BUTTON {
 		input.mouse.leftDown = true
-	} else if button == 3 {
+	} else if button == RIGHT_BUTTON {
 		input.mouse.rightDown = true
 	}
 }
 
 func onMouseUp(event *js.Object) {
-	button := event.Get("which").Int()
-	if button == 1 {
+	button := event.Get("button").Int()
+	if button == LEFT_BUTTON {
 		input.mouse.leftDown = false
-	} else if button == 2 {
+	} else if button == RIGHT_BUTTON {
 		input.mouse.rightDown = false
 	}
 }

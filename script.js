@@ -20816,7 +20816,7 @@ $packages["github.com/gopherjs/webgl"] = (function() {
 	return $pkg;
 })();
 $packages["main"] = (function() {
-	var $pkg = {}, $init, fsm, mgl32, js, webgl, shaderAsset, failedState, mainState, initState, inputType, mouse, loadState, menuState, ptrType, ptrType$1, sliceType, ptrType$2, ptrType$3, funcType, funcType$1, chanType, sliceType$1, arrayType, ptrType$4, ptrType$5, ptrType$6, ptrType$7, testShader, testShader_ptr, shaderAssets, mainFailedState, mainInitState, input, mainLoadState, document, canvas, gl, mainSm, squareVerticesBuffer, vPositionAttr, perspectiveMatrix, mvMatrix, mainMenuState, retrieveFile, fail, initCanvas, initWebGl, onMouseMove, onMouseDown, onMouseUp, onWindowResize, mainLoop, onBodyLoad, main, initTest, drawTest, createShader, loadShaderAsset;
+	var $pkg = {}, $init, fsm, mgl32, js, webgl, shaderAsset, failedState, mainState, initState, inputType, mouse, loadState, menuState, ptrType, ptrType$1, sliceType, ptrType$2, ptrType$3, funcType, funcType$1, funcType$2, chanType, sliceType$1, arrayType, ptrType$4, ptrType$5, ptrType$6, ptrType$7, testShader, testShader_ptr, shaderAssets, mainFailedState, mainInitState, input, mainLoadState, document, canvas, gl, mainSm, squareVerticesBuffer, vPositionAttr, perspectiveMatrix, mvMatrix, mainMenuState, retrieveFile, fail, initCanvas, initWebGl, onMouseMove, onMouseDown, onMouseUp, onWindowResize, mainLoop, onBodyLoad, main, initTest, drawTest, createShader, loadShaderAsset;
 	fsm = $packages["github.com/Bredgren/fsm"];
 	mgl32 = $packages["github.com/go-gl/mathgl/mgl32"];
 	js = $packages["github.com/gopherjs/gopherjs/js"];
@@ -20893,6 +20893,7 @@ $packages["main"] = (function() {
 	ptrType$3 = $ptrType(ptrType$2);
 	funcType = $funcType([], [], false);
 	funcType$1 = $funcType([ptrType$2], [], false);
+	funcType$2 = $funcType([], [$Bool], false);
 	chanType = $chanType($String, false, false);
 	sliceType$1 = $sliceType($Float32);
 	arrayType = $arrayType($Float32, 16);
@@ -20973,13 +20974,6 @@ $packages["main"] = (function() {
 		document = $global.document;
 		initCanvas();
 		$r = initWebGl(); /* */ $s = 1; case 1: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
-		canvas.addEventListener($externalize("mousemove", $String), $externalize(onMouseMove, funcType$1));
-		canvas.addEventListener($externalize("mousedown", $String), $externalize(onMouseDown, funcType$1));
-		canvas.addEventListener($externalize("mouseup", $String), $externalize(onMouseUp, funcType$1));
-		canvas.addEventListener($externalize("oncontextmenu", $String), $externalize((function(e) {
-			var $ptr, e;
-			e.preventDefault();
-		}), funcType$1));
 		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: initState.ptr.prototype.OnEnter }; } $f.$ptr = $ptr; $f.s = s; $f.$s = $s; $f.$r = $r; return $f;
 	};
 	initState.prototype.OnEnter = function() { return this.$val.OnEnter(); };
@@ -21009,6 +21003,13 @@ $packages["main"] = (function() {
 		canvas = document.createElement($externalize("canvas", $String));
 		canvas.style.margin = $externalize("auto", $String);
 		canvas.style.display = $externalize("inherit", $String);
+		canvas.addEventListener($externalize("mousemove", $String), $externalize(onMouseMove, funcType$1));
+		canvas.addEventListener($externalize("mousedown", $String), $externalize(onMouseDown, funcType$1));
+		canvas.addEventListener($externalize("mouseup", $String), $externalize(onMouseUp, funcType$1));
+		canvas.oncontextmenu = $externalize((function() {
+			var $ptr;
+			return false;
+		}), funcType$2);
 		document.body.appendChild(canvas);
 	};
 	initWebGl = function() {
@@ -21036,18 +21037,17 @@ $packages["main"] = (function() {
 	};
 	onMouseDown = function(event) {
 		var $ptr, button, event;
-		console.log(event);
-		button = $parseInt(event.which) >> 0;
-		if (button === 1) {
+		button = $parseInt(event.button) >> 0;
+		if (button === 0) {
 			input.mouse.leftDown = true;
-		} else if (button === 3) {
+		} else if (button === 2) {
 			input.mouse.rightDown = true;
 		}
 	};
 	onMouseUp = function(event) {
 		var $ptr, button, event;
-		button = $parseInt(event.which) >> 0;
-		if (button === 1) {
+		button = $parseInt(event.button) >> 0;
+		if (button === 0) {
 			input.mouse.leftDown = false;
 		} else if (button === 2) {
 			input.mouse.rightDown = false;
