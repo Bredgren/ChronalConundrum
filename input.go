@@ -25,35 +25,17 @@ type mouse struct {
 }
 
 func onMouseMove(event *js.Object) {
-	// TODO: figure out cross-browser support (at least for firefox)
-
-	// client := mgl32.Vec2{
-	// 	float32(event.Get("clientX").Int()),
-	// 	float32(event.Get("clientY").Int()),
-	// }
-	layer := mgl32.Vec2{
-		float32(event.Get("layerX").Int()),
-		float32(event.Get("layerY").Int()),
+	// Find mouse position relative to the canvas
+	objLeft := 0
+	objTop := 0
+	for obj := canvas; obj.Get("offsetParent") != nil; obj = obj.Get("offsetParent") {
+		objLeft += obj.Get("offsetLeft").Int()
+		objTop += obj.Get("offsetTop").Int()
 	}
-	// offset := mgl32.Vec2{
-	// 	float32(event.Get("offsetX").Int()),
-	// 	float32(event.Get("offsetY").Int()),
-	// }
-	// page := mgl32.Vec2{
-	// 	float32(event.Get("pageX").Int()),
-	// 	float32(event.Get("pageY").Int()),
-	// }
-	// screen := mgl32.Vec2{
-	// 	float32(event.Get("screenX").Int()),
-	// 	float32(event.Get("screenY").Int()),
-	// }
-	// xy := mgl32.Vec2{
-	// 	float32(event.Get("x").Int()),
-	// 	float32(event.Get("y").Int()),
-	// }
-
-	// println("mousemove", client, layer, offset, page, screen, xy)
-	input.mouse.pos = layer
+	input.mouse.pos = mgl32.Vec2{
+		float32(event.Get("pageX").Int() - objLeft),
+		float32(event.Get("pageY").Int() - objTop),
+	}
 }
 
 func onMouseDown(event *js.Object) {

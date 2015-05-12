@@ -21031,9 +21031,17 @@ $packages["main"] = (function() {
 		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: initWebGl }; } $f.$ptr = $ptr; $f._r = _r; $f._tuple = _tuple; $f.attrs = attrs; $f.err = err; $f.glcontext = glcontext; $f.$s = $s; $f.$r = $r; return $f;
 	};
 	onMouseMove = function(event) {
-		var $ptr, event, layer;
-		layer = $toNativeArray($kindFloat32, [($parseInt(event.layerX) >> 0), ($parseInt(event.layerY) >> 0)]);
-		$copy(input.mouse.pos, layer, mgl32.Vec2);
+		var $ptr, event, obj, objLeft, objTop;
+		objLeft = 0;
+		objTop = 0;
+		obj = canvas;
+		while (true) {
+			if (!(!(obj.offsetParent === null))) { break; }
+			objLeft = objLeft + (($parseInt(obj.offsetLeft) >> 0)) >> 0;
+			objTop = objTop + (($parseInt(obj.offsetTop) >> 0)) >> 0;
+			obj = obj.offsetParent;
+		}
+		$copy(input.mouse.pos, $toNativeArray($kindFloat32, [(($parseInt(event.pageX) >> 0) - objLeft >> 0), (($parseInt(event.pageY) >> 0) - objTop >> 0)]), mgl32.Vec2);
 	};
 	onMouseDown = function(event) {
 		var $ptr, button, event;
@@ -21203,7 +21211,7 @@ $packages["main"] = (function() {
 	menuState.ptr.prototype.Update = function() {
 		var $ptr, s;
 		s = this;
-		console.log(input.mouse.leftDown, input.mouse.rightDown);
+		console.log(input.mouse.leftDown, input.mouse.rightDown, input.mouse.pos);
 	};
 	menuState.prototype.Update = function() { return this.$val.Update(); };
 	menuState.ptr.prototype.Draw = function() {

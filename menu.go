@@ -29,7 +29,7 @@ func (s *menuState) OnExit() {
 }
 
 func (s *menuState) Update() {
-	println(input.mouse.leftDown, input.mouse.rightDown)
+	println(input.mouse.leftDown, input.mouse.rightDown, input.mouse.pos)
 }
 
 func (s *menuState) Draw() {
