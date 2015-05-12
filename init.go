@@ -48,7 +48,7 @@ func initCanvas() {
 	canvas.Call("addEventListener", "mousemove", onMouseMove)
 	canvas.Call("addEventListener", "mousedown", onMouseDown)
 	canvas.Call("addEventListener", "mouseup", onMouseUp)
-	canvas.Set("oncontextmenu", func () bool { return false })
+	canvas.Set("oncontextmenu", func() bool { return false })
 	document.Get("body").Call("appendChild", canvas)
 }
 
