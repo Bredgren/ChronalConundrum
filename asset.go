@@ -21,7 +21,7 @@ type shaderAsset struct {
 
 // Textures
 var (
-	uiTexture *js.Object
+	uiTexture     *js.Object
 	textureAssets = []textureAsset{
 		{"ui.png", &uiTexture},
 	}
@@ -29,7 +29,7 @@ var (
 
 type textureAsset struct {
 	textureFile string
-	texture **js.Object
+	texture     **js.Object
 }
 
 // Sounds
