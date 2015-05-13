@@ -30,20 +30,12 @@ func loadShaderAsset(asset *shaderAsset, done chan<- string) {
 	retrieveFile(asset.fragFile, frag)
 
 	vertSource := <-vert
-	if vertSource == "" {
-		fail("Failed to load asset " + asset.vertFile)
-		return
-	}
 	fragSource := <-frag
-	if fragSource == "" {
-		fail("Failed to load asset " + asset.fragFile)
-		return
-	}
 
 	var vertShader *js.Object = createShader(vertSource, gl.VERTEX_SHADER)
 	var fragShader *js.Object = createShader(fragSource, gl.FRAGMENT_SHADER)
 
-	shader := gl.CreateProgram()
+	var shader *js.Object = gl.CreateProgram()
 	gl.AttachShader(shader, vertShader)
 	gl.AttachShader(shader, fragShader)
 	gl.LinkProgram(shader)
@@ -54,8 +46,5 @@ func loadShaderAsset(asset *shaderAsset, done chan<- string) {
 	}
 
 	*asset.shader = shader
-	// TODO: exception is thrown about sending to closed channel because this triggers
-	//       the loadState to exit and the js code created here access the channel
-	//       afterward. (may not be a serious problem though)
 	done <- asset.vertFile + " " + asset.fragFile
 }

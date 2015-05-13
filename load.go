@@ -22,18 +22,24 @@ func (s *loadState) OnEnter() {
 	s.loadChannel = make(chan string)
 
 	s.totalAssets = len(shaderAssets)
-	// s.totalAssets += len(textureAssets)
+	s.totalAssets += len(textureAssets)
 	// s.totalAssets += len(soundAssets)
 	// s.totalAssets += len(modelAssets)
 
 	for _, asset := range shaderAssets {
 		go loadShaderAsset(&asset, s.loadChannel)
 	}
+
+	for _, asset := range textureAssets {
+		go loadTextureAsset(&asset, s.loadChannel)
+	}
 }
 
 func (s *loadState) OnExit() {
 	println("loadState.OnExit")
-	close(s.loadChannel)
+	// TODO: closing this causes an exception to be thrown about sending to closed
+	//       channel by who ever is the last to load.
+	// close(s.loadChannel)
 }
 
 func (s *loadState) Update() {
