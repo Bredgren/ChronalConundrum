@@ -6,10 +6,9 @@ import (
 
 // Shaders
 var (
-	testShader   *js.Object
-	tmpShader    *js.Object
+	uiShader   *js.Object
 	shaderAssets = []shaderAsset{
-		{"test.vert", "test.frag", &testShader},
+		{"ui.vert", "ui.frag", &uiShader},
 	}
 )
 

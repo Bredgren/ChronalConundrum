@@ -18,8 +18,11 @@ func (s *loadState) Name() string {
 
 func (s *loadState) OnEnter() {
 	println("loadState.OnEnter")
+	initTest()
 
-	s.loadChannel = make(chan string)
+	if s.loadChannel == nil {
+		s.loadChannel = make(chan string)
+	}
 
 	s.totalAssets = len(shaderAssets)
 	s.totalAssets += len(textureAssets)
@@ -57,6 +60,7 @@ func (s *loadState) Update() {
 }
 
 func (s *loadState) Draw() {
-	percent := float64(s.assetsLoaded) / float64(s.totalAssets) * 100.0
-	println("loading... ", percent, "%")
+	// percent := float64(s.assetsLoaded) / float64(s.totalAssets) * 100.0
+	// println("loading... ", percent, "%")
+	drawTest()
 }

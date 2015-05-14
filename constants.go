@@ -7,6 +7,9 @@ import (
 const (
 	WINDOW_RATIO = 2.0 / 3.0
 	VIEW_DEGREES = 45
+	// UI
+	MENU_NEW_POS_X float32 = 0.0
+	MENU_NEW_POS_Y float32 = 0.0
 )
 
 var (
