@@ -72,7 +72,7 @@ var (
 	vPositionAttr        int
 	perspectiveMatrix    mgl32.Mat4
 	mvMatrix             mgl32.Mat4
-	shader *js.Object
+	shader               *js.Object
 )
 
 func initTest() {

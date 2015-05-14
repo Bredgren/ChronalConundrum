@@ -6,7 +6,7 @@ import (
 
 // Shaders
 var (
-	uiShader   *js.Object
+	uiShader     *js.Object
 	shaderAssets = []shaderAsset{
 		{"ui.vert", "ui.frag", &uiShader},
 	}

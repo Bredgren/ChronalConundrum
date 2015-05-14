@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/gopherjs/gopherjs/js"
 	"github.com/go-gl/mathgl/mgl32"
+	"github.com/gopherjs/gopherjs/js"
 )
 
 var (
@@ -37,10 +37,10 @@ func (s *menuState) Draw() {
 }
 
 type menuNewButton struct {
-	vertBuffer *js.Object
+	vertBuffer     *js.Object
 	texCoordBuffer *js.Object
-	vertAttr int
-	texAttr int
+	vertAttr       int
+	texAttr        int
 }
 
 func newMenuNewButton() *menuNewButton {
@@ -53,7 +53,7 @@ func newMenuNewButton() *menuNewButton {
 		MENU_NEW_POS_X + w, MENU_NEW_POS_Y + h,
 	}
 
-	texCoords := []float32 {
+	texCoords := []float32{
 		0.0, 0.0,
 		1.0, 0.0,
 		0.0, 1.0,
