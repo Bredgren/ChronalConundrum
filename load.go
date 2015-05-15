@@ -74,7 +74,7 @@ var (
 	squareVerticesBuffer *js.Object
 	vPositionAttr        int
 	mvMatrix             mgl32.Mat4
-	loadShader               *js.Object
+	loadShader           *js.Object
 )
 
 func initLoadBar() {

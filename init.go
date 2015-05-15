@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/go-gl/mathgl/mgl32"
 	"github.com/gopherjs/gopherjs/js"
 	"github.com/gopherjs/webgl"
-	"github.com/go-gl/mathgl/mgl32"
 )
 
 var (

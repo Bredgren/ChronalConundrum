@@ -50,7 +50,7 @@ type menuButton struct {
 	texCoordBuffer *js.Object
 	vertAttr       int
 	texAttr        int
-	img mgl32.Vec4
+	img            mgl32.Vec4
 }
 
 func newMenuButton(rect, img mgl32.Vec4) *menuButton {

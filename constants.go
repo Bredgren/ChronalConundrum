@@ -14,10 +14,10 @@ var (
 )
 
 // UI - vector values are x, y, w, h
-var(
+var (
 	MENU_NEW_RECT = mgl32.Vec4{-0.75, 1.0, 0.5, 0.125}
-	MENU_NEW_IMG = mgl32.Vec4{0.0, 0.75, 1.0, 0.25}
+	MENU_NEW_IMG  = mgl32.Vec4{0.0, 0.75, 1.0, 0.25}
 
 	MENU_CONT_RECT = mgl32.Vec4{0.75, 1.0, 0.5, 0.125}
-	MENU_CONT_IMG = mgl32.Vec4{0.0, 0.5, 1.0, 0.25}
+	MENU_CONT_IMG  = mgl32.Vec4{0.0, 0.5, 1.0, 0.25}
 )
