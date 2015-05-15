@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gopherjs/gopherjs/js"
 	"github.com/gopherjs/webgl"
+	"github.com/go-gl/mathgl/mgl32"
 )
 
 var (
@@ -23,7 +24,7 @@ func (s *initState) OnEnter() {
 	document = js.Global.Get("document")
 	initCanvas()
 	initWebGl()
-
+	perspectiveMatrix = mgl32.Perspective(VIEW_ANGLE, WINDOW_RATIO, 0.1, 100.0)
 }
 
 func (s *initState) OnExit() {

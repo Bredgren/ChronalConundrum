@@ -12,7 +12,7 @@ var (
 
 // The state for handling the game's main menu. Implements fsm.State and mainState.
 type menuState struct {
-	newButton *menuNewButton
+	buttons [2]*menuButton
 }
 
 func (s *menuState) Name() string {
@@ -21,7 +21,8 @@ func (s *menuState) Name() string {
 
 func (s *menuState) OnEnter() {
 	println("menuState.OnEnter")
-	s.newButton = newMenuNewButton()
+	s.buttons[0] = newMenuButton(MENU_NEW_RECT, MENU_NEW_IMG)
+	s.buttons[1] = newMenuButton(MENU_CONT_RECT, MENU_CONT_IMG)
 }
 
 func (s *menuState) OnExit() {
@@ -33,24 +34,31 @@ func (s *menuState) Update() {
 }
 
 func (s *menuState) Draw() {
-	s.newButton.draw()
+	s.drawButtons()
 }
 
-type menuNewButton struct {
+func (s *menuState) drawButtons() {
+	gl.UseProgram(uiShader)
+
+	for _, button := range s.buttons {
+		button.draw()
+	}
+}
+
+type menuButton struct {
 	vertBuffer     *js.Object
 	texCoordBuffer *js.Object
 	vertAttr       int
 	texAttr        int
+	img mgl32.Vec4
 }
 
-func newMenuNewButton() *menuNewButton {
-	var w float32 = 1.0 / 2.0
-	var h float32 = w / 4.0
+func newMenuButton(rect, img mgl32.Vec4) *menuButton {
 	vertices := []float32{
-		MENU_NEW_POS_X - w, MENU_NEW_POS_Y - h,
-		MENU_NEW_POS_X + w, MENU_NEW_POS_Y - h,
-		MENU_NEW_POS_X - w, MENU_NEW_POS_Y + h,
-		MENU_NEW_POS_X + w, MENU_NEW_POS_Y + h,
+		rect.X() - rect[2], rect.Y() - rect[3],
+		rect.X() + rect[2], rect.Y() - rect[3],
+		rect.X() - rect[2], rect.Y() + rect[3],
+		rect.X() + rect[2], rect.Y() + rect[3],
 	}
 
 	texCoords := []float32{
@@ -74,19 +82,15 @@ func newMenuNewButton() *menuNewButton {
 	var texAttr int = gl.GetAttribLocation(uiShader, "aTextureCoord")
 	gl.EnableVertexAttribArray(texAttr)
 
-	return &menuNewButton{buf, tex, vertAttr, texAttr}
+	return &menuButton{buf, tex, vertAttr, texAttr, img}
 }
 
-func (b *menuNewButton) draw() {
-	gl.UseProgram(uiShader)
-
+func (b *menuButton) draw() {
 	gl.BindBuffer(gl.ARRAY_BUFFER, b.vertBuffer)
 	gl.VertexAttribPointer(b.vertAttr, 2, gl.FLOAT, false, 0, 0)
 
 	gl.BindBuffer(gl.ARRAY_BUFFER, b.texCoordBuffer)
 	gl.VertexAttribPointer(b.texAttr, 2, gl.FLOAT, false, 0, 0)
-
-	perspectiveMatrix = mgl32.Perspective(VIEW_ANGLE, WINDOW_RATIO, 0.1, 100.0)
 
 	mvMatrix = mgl32.Ident4()
 	mvMatrix = mvMatrix.Mul4(mgl32.Translate3D(0.0, 0.0, -6.0))
@@ -99,9 +103,12 @@ func (b *menuNewButton) draw() {
 	mvm := [16]float32(mvMatrix)
 	gl.UniformMatrix4fv(mvUniform, false, mvm[:])
 
-	gl.ActiveTexture(gl.TEXTURE0)
+	// gl.ActiveTexture(gl.TEXTURE0)
 	gl.BindTexture(gl.TEXTURE_2D, uiTexture)
-	gl.Uniform1i(gl.GetUniformLocation(uiShader, "uSampler"), 0)
+	// TODO: does uiTexture.Int() actually work?
+	gl.Uniform1i(gl.GetUniformLocation(uiShader, "uSampler"), uiTexture.Int())
+
+	gl.Uniform4f(gl.GetUniformLocation(uiShader, "uRect"), b.img[0], b.img[1], b.img[2], b.img[3])
 
 	gl.DrawArrays(gl.TRIANGLE_STRIP, 0, 4)
 }

@@ -20816,7 +20816,7 @@ $packages["github.com/gopherjs/webgl"] = (function() {
 	return $pkg;
 })();
 $packages["main"] = (function() {
-	var $pkg = {}, $init, fsm, mgl32, js, webgl, shaderAsset, textureAsset, failedState, mainState, initState, inputType, mouse, loadState, menuState, menuNewButton, ptrType, ptrType$1, sliceType, ptrType$2, ptrType$3, sliceType$1, funcType, funcType$1, funcType$2, chanType, sliceType$2, arrayType, chanType$1, ptrType$4, ptrType$5, ptrType$6, ptrType$7, ptrType$8, uiShader, uiShader_ptr, shaderAssets, uiTexture, uiTexture_ptr, textureAssets, mainFailedState, mainInitState, input, mainLoadState, document, canvas, gl, mainSm, squareVerticesBuffer, vPositionAttr, perspectiveMatrix, mvMatrix, shader, mainMenuState, retrieveFile, retrieveImage, fail, initCanvas, initWebGl, onMouseMove, onMouseDown, onMouseUp, clearWindow, onWindowResize, mainLoop, onBodyLoad, main, initTest, drawTest, newMenuNewButton, createShader, loadShaderAsset, loadTextureAsset;
+	var $pkg = {}, $init, fsm, mgl32, js, webgl, shaderAsset, textureAsset, failedState, mainState, initState, inputType, mouse, loadState, menuState, menuButton, ptrType, ptrType$1, sliceType, ptrType$2, ptrType$3, sliceType$1, funcType, funcType$1, funcType$2, chanType, sliceType$2, arrayType, chanType$1, ptrType$4, ptrType$5, ptrType$6, ptrType$7, arrayType$1, ptrType$8, uiShader, uiShader_ptr, shaderAssets, uiTexture, uiTexture_ptr, textureAssets, perspectiveMatrix, mainFailedState, mainInitState, input, mainLoadState, squareVerticesBuffer, vPositionAttr, mvMatrix, loadShader, document, canvas, gl, mainSm, mainMenuState, retrieveFile, retrieveImage, fail, initCanvas, initWebGl, onMouseMove, onMouseDown, onMouseUp, initLoadBar, drawLoadBar, clearWindow, onWindowResize, mainLoop, onBodyLoad, main, newMenuButton, createShader, loadShaderAsset, loadTextureAsset;
 	fsm = $packages["github.com/Bredgren/fsm"];
 	mgl32 = $packages["github.com/go-gl/mathgl/mgl32"];
 	js = $packages["github.com/gopherjs/gopherjs/js"];
@@ -20890,27 +20890,29 @@ $packages["main"] = (function() {
 		this.assetsLoaded = assetsLoaded_;
 		this.loadChannel = loadChannel_;
 	});
-	menuState = $pkg.menuState = $newType(0, $kindStruct, "main.menuState", "menuState", "main", function(newButton_) {
+	menuState = $pkg.menuState = $newType(0, $kindStruct, "main.menuState", "menuState", "main", function(buttons_) {
 		this.$val = this;
 		if (arguments.length === 0) {
-			this.newButton = ptrType$7.nil;
+			this.buttons = arrayType$1.zero();
 			return;
 		}
-		this.newButton = newButton_;
+		this.buttons = buttons_;
 	});
-	menuNewButton = $pkg.menuNewButton = $newType(0, $kindStruct, "main.menuNewButton", "menuNewButton", "main", function(vertBuffer_, texCoordBuffer_, vertAttr_, texAttr_) {
+	menuButton = $pkg.menuButton = $newType(0, $kindStruct, "main.menuButton", "menuButton", "main", function(vertBuffer_, texCoordBuffer_, vertAttr_, texAttr_, img_) {
 		this.$val = this;
 		if (arguments.length === 0) {
 			this.vertBuffer = null;
 			this.texCoordBuffer = null;
 			this.vertAttr = 0;
 			this.texAttr = 0;
+			this.img = mgl32.Vec4.zero();
 			return;
 		}
 		this.vertBuffer = vertBuffer_;
 		this.texCoordBuffer = texCoordBuffer_;
 		this.vertAttr = vertAttr_;
 		this.texAttr = texAttr_;
+		this.img = img_;
 	});
 	ptrType = $ptrType(webgl.Context);
 	ptrType$1 = $ptrType(fsm.Fsm);
@@ -20928,7 +20930,8 @@ $packages["main"] = (function() {
 	ptrType$4 = $ptrType(failedState);
 	ptrType$5 = $ptrType(initState);
 	ptrType$6 = $ptrType(loadState);
-	ptrType$7 = $ptrType(menuNewButton);
+	ptrType$7 = $ptrType(menuButton);
+	arrayType$1 = $arrayType(ptrType$7, 2);
 	ptrType$8 = $ptrType(menuState);
 	retrieveFile = function(fileName, contents) {
 		var $ptr, contents, fileName, xmlHttp;
@@ -21027,6 +21030,7 @@ $packages["main"] = (function() {
 		document = $global.document;
 		initCanvas();
 		$r = initWebGl(); /* */ $s = 1; case 1: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		$copy(perspectiveMatrix, mgl32.Perspective($pkg.VIEW_ANGLE, 0.6666666865348816, 0.10000000149011612, 100), mgl32.Mat4);
 		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: initState.ptr.prototype.OnEnter }; } $f.$ptr = $ptr; $f.s = s; $f.$s = $s; $f.$r = $r; return $f;
 	};
 	initState.prototype.OnEnter = function() { return this.$val.OnEnter(); };
@@ -21125,7 +21129,7 @@ $packages["main"] = (function() {
 		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; _i = $f._i; _i$1 = $f._i$1; _ref = $f._ref; _ref$1 = $f._ref$1; asset = $f.asset; asset$1 = $f.asset$1; s = $f.s; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
 		s = this;
 		console.log("loadState.OnEnter");
-		$r = initTest(); /* */ $s = 1; case 1: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		$r = initLoadBar(); /* */ $s = 1; case 1: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 		if (s.loadChannel === chanType.nil) {
 			s.loadChannel = new chanType(0);
 		}
@@ -21176,11 +21180,53 @@ $packages["main"] = (function() {
 	};
 	loadState.prototype.Update = function() { return this.$val.Update(); };
 	loadState.ptr.prototype.Draw = function() {
-		var $ptr, s;
+		var $ptr, percent, s;
 		s = this;
-		drawTest();
+		percent = s.assetsLoaded / s.totalAssets * 100;
+		drawLoadBar(percent);
 	};
 	loadState.prototype.Draw = function() { return this.$val.Draw(); };
+	initLoadBar = function() {
+		var $ptr, _r, _r$1, fragShader, vertShader, vertices, $s, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; _r = $f._r; _r$1 = $f._r$1; fragShader = $f.fragShader; vertShader = $f.vertShader; vertices = $f.vertices; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+		squareVerticesBuffer = gl.CreateBuffer();
+		gl.BindBuffer($parseInt(gl.Object.ARRAY_BUFFER) >> 0, squareVerticesBuffer);
+		vertices = new sliceType$2([1, 1, 0, -1, 1, 0, -1, -1, 0]);
+		gl.BufferData($parseInt(gl.Object.ARRAY_BUFFER) >> 0, vertices, $parseInt(gl.Object.STATIC_DRAW) >> 0);
+		_r = createShader("attribute vec3 aVertexPosition;\n\nuniform mat4 uMVMatrix;\nuniform mat4 uPMatrix;\n\nvoid main(void) {\n  gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);\n}", $parseInt(gl.Object.VERTEX_SHADER) >> 0); /* */ $s = 1; case 1: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
+		vertShader = _r;
+		_r$1 = createShader("void main(void) {\n  gl_FragColor = vec4(0.5, 1.0, 1.0, 1.0);\n}", $parseInt(gl.Object.FRAGMENT_SHADER) >> 0); /* */ $s = 2; case 2: if($c) { $c = false; _r$1 = _r$1.$blk(); } if (_r$1 && _r$1.$blk !== undefined) { break s; }
+		fragShader = _r$1;
+		loadShader = gl.CreateProgram();
+		gl.AttachShader(loadShader, vertShader);
+		gl.AttachShader(loadShader, fragShader);
+		gl.LinkProgram(loadShader);
+		/* */ if (!gl.GetProgramParameterb(loadShader, $parseInt(gl.Object.LINK_STATUS) >> 0)) { $s = 3; continue; }
+		/* */ $s = 4; continue;
+		/* if (!gl.GetProgramParameterb(loadShader, $parseInt(gl.Object.LINK_STATUS) >> 0)) { */ case 3:
+			$r = fail("Unable to initiaize shader program"); /* */ $s = 5; case 5: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+			return;
+		/* } */ case 4:
+		gl.UseProgram(loadShader);
+		vPositionAttr = gl.GetAttribLocation(loadShader, "aVertexPosition");
+		gl.EnableVertexAttribArray(vPositionAttr);
+		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: initLoadBar }; } $f.$ptr = $ptr; $f._r = _r; $f._r$1 = _r$1; $f.fragShader = fragShader; $f.vertShader = vertShader; $f.vertices = vertices; $f.$s = $s; $f.$r = $r; return $f;
+	};
+	drawLoadBar = function(percent) {
+		var $ptr, mvUniform, mvm, pUniform, percent, pm;
+		gl.Clear(($parseInt(gl.Object.COLOR_BUFFER_BIT) >> 0) | ($parseInt(gl.Object.DEPTH_BUFFER_BIT) >> 0));
+		gl.BindBuffer($parseInt(gl.Object.ARRAY_BUFFER) >> 0, squareVerticesBuffer);
+		gl.VertexAttribPointer(vPositionAttr, 3, $parseInt(gl.Object.FLOAT) >> 0, false, 0, 0);
+		$copy(mvMatrix, mgl32.Ident4(), mgl32.Mat4);
+		$copy(mvMatrix, new mgl32.Mat4(mvMatrix).Mul4(mgl32.Translate3D(0, 0, -6)), mgl32.Mat4);
+		pUniform = gl.GetUniformLocation(loadShader, "uPMatrix");
+		pm = $clone($clone(perspectiveMatrix, arrayType), arrayType);
+		gl.UniformMatrix4fv(pUniform, false, new sliceType$2(pm));
+		mvUniform = gl.GetUniformLocation(loadShader, "uMVMatrix");
+		mvm = $clone($clone(mvMatrix, arrayType), arrayType);
+		gl.UniformMatrix4fv(mvUniform, false, new sliceType$2(mvm));
+		gl.DrawArrays($parseInt(gl.Object.TRIANGLE_STRIP) >> 0, 0, 3);
+	};
 	clearWindow = function() {
 		var $ptr;
 		gl.Clear(($parseInt(gl.Object.COLOR_BUFFER_BIT) >> 0) | ($parseInt(gl.Object.DEPTH_BUFFER_BIT) >> 0));
@@ -21230,49 +21276,6 @@ $packages["main"] = (function() {
 		$global.onBodyLoad = $externalize(onBodyLoad, funcType);
 		$global.addEventListener($externalize("resize", $String), $externalize(onWindowResize, funcType));
 	};
-	initTest = function() {
-		var $ptr, _r, _r$1, fragShader, vertShader, vertices, $s, $r;
-		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; _r = $f._r; _r$1 = $f._r$1; fragShader = $f.fragShader; vertShader = $f.vertShader; vertices = $f.vertices; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
-		console.log("initTest");
-		squareVerticesBuffer = gl.CreateBuffer();
-		gl.BindBuffer($parseInt(gl.Object.ARRAY_BUFFER) >> 0, squareVerticesBuffer);
-		vertices = new sliceType$2([1, 1, 0, -1, 1, 0, -1, -1, 0]);
-		gl.BufferData($parseInt(gl.Object.ARRAY_BUFFER) >> 0, vertices, $parseInt(gl.Object.STATIC_DRAW) >> 0);
-		_r = createShader("attribute vec3 aVertexPosition;\n\nuniform mat4 uMVMatrix;\nuniform mat4 uPMatrix;\n\nvoid main(void) {\n  gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);\n}", $parseInt(gl.Object.VERTEX_SHADER) >> 0); /* */ $s = 1; case 1: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
-		vertShader = _r;
-		_r$1 = createShader("void main(void) {\n  gl_FragColor = vec4(0.5, 1.0, 1.0, 1.0);\n}", $parseInt(gl.Object.FRAGMENT_SHADER) >> 0); /* */ $s = 2; case 2: if($c) { $c = false; _r$1 = _r$1.$blk(); } if (_r$1 && _r$1.$blk !== undefined) { break s; }
-		fragShader = _r$1;
-		shader = gl.CreateProgram();
-		gl.AttachShader(shader, vertShader);
-		gl.AttachShader(shader, fragShader);
-		gl.LinkProgram(shader);
-		/* */ if (!gl.GetProgramParameterb(shader, $parseInt(gl.Object.LINK_STATUS) >> 0)) { $s = 3; continue; }
-		/* */ $s = 4; continue;
-		/* if (!gl.GetProgramParameterb(shader, $parseInt(gl.Object.LINK_STATUS) >> 0)) { */ case 3:
-			$r = fail("Unable to initiaize shader program"); /* */ $s = 5; case 5: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
-			return;
-		/* } */ case 4:
-		gl.UseProgram(shader);
-		vPositionAttr = gl.GetAttribLocation(shader, "aVertexPosition");
-		gl.EnableVertexAttribArray(vPositionAttr);
-		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: initTest }; } $f.$ptr = $ptr; $f._r = _r; $f._r$1 = _r$1; $f.fragShader = fragShader; $f.vertShader = vertShader; $f.vertices = vertices; $f.$s = $s; $f.$r = $r; return $f;
-	};
-	drawTest = function() {
-		var $ptr, mvUniform, mvm, pUniform, pm;
-		gl.Clear(($parseInt(gl.Object.COLOR_BUFFER_BIT) >> 0) | ($parseInt(gl.Object.DEPTH_BUFFER_BIT) >> 0));
-		gl.BindBuffer($parseInt(gl.Object.ARRAY_BUFFER) >> 0, squareVerticesBuffer);
-		gl.VertexAttribPointer(vPositionAttr, 3, $parseInt(gl.Object.FLOAT) >> 0, false, 0, 0);
-		$copy(perspectiveMatrix, mgl32.Perspective($pkg.VIEW_ANGLE, 0.6666666865348816, 0.10000000149011612, 100), mgl32.Mat4);
-		$copy(mvMatrix, mgl32.Ident4(), mgl32.Mat4);
-		$copy(mvMatrix, new mgl32.Mat4(mvMatrix).Mul4(mgl32.Translate3D(0, 0, -6)), mgl32.Mat4);
-		pUniform = gl.GetUniformLocation(shader, "uPMatrix");
-		pm = $clone($clone(perspectiveMatrix, arrayType), arrayType);
-		gl.UniformMatrix4fv(pUniform, false, new sliceType$2(pm));
-		mvUniform = gl.GetUniformLocation(shader, "uMVMatrix");
-		mvm = $clone($clone(mvMatrix, arrayType), arrayType);
-		gl.UniformMatrix4fv(mvUniform, false, new sliceType$2(mvm));
-		gl.DrawArrays($parseInt(gl.Object.TRIANGLE_STRIP) >> 0, 0, 3);
-	};
 	menuState.ptr.prototype.Name = function() {
 		var $ptr, s;
 		s = this;
@@ -21283,7 +21286,8 @@ $packages["main"] = (function() {
 		var $ptr, s;
 		s = this;
 		console.log("menuState.OnEnter");
-		s.newButton = newMenuNewButton();
+		s.buttons[0] = newMenuButton($pkg.MENU_NEW_RECT, $pkg.MENU_NEW_IMG);
+		s.buttons[1] = newMenuButton($pkg.MENU_CONT_RECT, $pkg.MENU_CONT_IMG);
 	};
 	menuState.prototype.OnEnter = function() { return this.$val.OnEnter(); };
 	menuState.ptr.prototype.OnExit = function() {
@@ -21301,14 +21305,28 @@ $packages["main"] = (function() {
 	menuState.ptr.prototype.Draw = function() {
 		var $ptr, s;
 		s = this;
-		s.newButton.draw();
+		s.drawButtons();
 	};
 	menuState.prototype.Draw = function() { return this.$val.Draw(); };
-	newMenuNewButton = function() {
-		var $ptr, buf, h, tex, texAttr, texCoords, vertAttr, vertices, w;
-		w = 0.5;
-		h = $fround(w / 4);
-		vertices = new sliceType$2([$fround(0 - w), $fround(0 - h), $fround(0 + w), $fround(0 - h), $fround(0 - w), $fround(0 + h), $fround(0 + w), $fround(0 + h)]);
+	menuState.ptr.prototype.drawButtons = function() {
+		var $ptr, _i, _ref, button, s;
+		s = this;
+		gl.UseProgram(uiShader);
+		_ref = s.buttons;
+		_i = 0;
+		while (true) {
+			if (!(_i < 2)) { break; }
+			button = ((_i < 0 || _i >= _ref.length) ? $throwRuntimeError("index out of range") : _ref[_i]);
+			button.draw();
+			_i++;
+		}
+	};
+	menuState.prototype.drawButtons = function() { return this.$val.drawButtons(); };
+	newMenuButton = function(rect, img) {
+		var $ptr, buf, img, rect, tex, texAttr, texCoords, vertAttr, vertices;
+		img = $clone(img, mgl32.Vec4);
+		rect = $clone(rect, mgl32.Vec4);
+		vertices = new sliceType$2([$fround(new mgl32.Vec4(rect).X() - rect[2]), $fround(new mgl32.Vec4(rect).Y() - rect[3]), $fround(new mgl32.Vec4(rect).X() + rect[2]), $fround(new mgl32.Vec4(rect).Y() - rect[3]), $fround(new mgl32.Vec4(rect).X() - rect[2]), $fround(new mgl32.Vec4(rect).Y() + rect[3]), $fround(new mgl32.Vec4(rect).X() + rect[2]), $fround(new mgl32.Vec4(rect).Y() + rect[3])]);
 		texCoords = new sliceType$2([0, 0, 1, 0, 0, 1, 1, 1]);
 		buf = gl.CreateBuffer();
 		gl.BindBuffer($parseInt(gl.Object.ARRAY_BUFFER) >> 0, buf);
@@ -21320,17 +21338,15 @@ $packages["main"] = (function() {
 		gl.EnableVertexAttribArray(vertAttr);
 		texAttr = gl.GetAttribLocation(uiShader, "aTextureCoord");
 		gl.EnableVertexAttribArray(texAttr);
-		return new menuNewButton.ptr(buf, tex, vertAttr, texAttr);
+		return new menuButton.ptr(buf, tex, vertAttr, texAttr, $clone(img, mgl32.Vec4));
 	};
-	menuNewButton.ptr.prototype.draw = function() {
+	menuButton.ptr.prototype.draw = function() {
 		var $ptr, b, mvUniform, mvm, pUniform, pm;
 		b = this;
-		gl.UseProgram(uiShader);
 		gl.BindBuffer($parseInt(gl.Object.ARRAY_BUFFER) >> 0, b.vertBuffer);
 		gl.VertexAttribPointer(b.vertAttr, 2, $parseInt(gl.Object.FLOAT) >> 0, false, 0, 0);
 		gl.BindBuffer($parseInt(gl.Object.ARRAY_BUFFER) >> 0, b.texCoordBuffer);
 		gl.VertexAttribPointer(b.texAttr, 2, $parseInt(gl.Object.FLOAT) >> 0, false, 0, 0);
-		$copy(perspectiveMatrix, mgl32.Perspective($pkg.VIEW_ANGLE, 0.6666666865348816, 0.10000000149011612, 100), mgl32.Mat4);
 		$copy(mvMatrix, mgl32.Ident4(), mgl32.Mat4);
 		$copy(mvMatrix, new mgl32.Mat4(mvMatrix).Mul4(mgl32.Translate3D(0, 0, -6)), mgl32.Mat4);
 		pUniform = gl.GetUniformLocation(uiShader, "uPMatrix");
@@ -21339,30 +21355,30 @@ $packages["main"] = (function() {
 		mvUniform = gl.GetUniformLocation(uiShader, "uMVMatrix");
 		mvm = $clone($clone(mvMatrix, arrayType), arrayType);
 		gl.UniformMatrix4fv(mvUniform, false, new sliceType$2(mvm));
-		gl.ActiveTexture($parseInt(gl.Object.TEXTURE0) >> 0);
 		gl.BindTexture($parseInt(gl.Object.TEXTURE_2D) >> 0, uiTexture);
-		gl.Uniform1i(gl.GetUniformLocation(uiShader, "uSampler"), 0);
+		gl.Uniform1i(gl.GetUniformLocation(uiShader, "uSampler"), $parseInt(uiTexture) >> 0);
+		gl.Uniform4f(gl.GetUniformLocation(uiShader, "uRect"), b.img[0], b.img[1], b.img[2], b.img[3]);
 		gl.DrawArrays($parseInt(gl.Object.TRIANGLE_STRIP) >> 0, 0, 4);
 	};
-	menuNewButton.prototype.draw = function() { return this.$val.draw(); };
+	menuButton.prototype.draw = function() { return this.$val.draw(); };
 	createShader = function(source, kind) {
-		var $ptr, kind, shader$1, source, $s, $r;
-		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; kind = $f.kind; shader$1 = $f.shader$1; source = $f.source; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
-		shader$1 = gl.CreateShader(kind);
-		gl.ShaderSource(shader$1, source);
-		gl.CompileShader(shader$1);
-		/* */ if (!gl.GetShaderParameterb(shader$1, $parseInt(gl.Object.COMPILE_STATUS) >> 0)) { $s = 1; continue; }
+		var $ptr, kind, shader, source, $s, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; kind = $f.kind; shader = $f.shader; source = $f.source; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+		shader = gl.CreateShader(kind);
+		gl.ShaderSource(shader, source);
+		gl.CompileShader(shader);
+		/* */ if (!gl.GetShaderParameterb(shader, $parseInt(gl.Object.COMPILE_STATUS) >> 0)) { $s = 1; continue; }
 		/* */ $s = 2; continue;
-		/* if (!gl.GetShaderParameterb(shader$1, $parseInt(gl.Object.COMPILE_STATUS) >> 0)) { */ case 1:
-			$r = fail("Error compiling shader: " + gl.GetShaderInfoLog(shader$1)); /* */ $s = 3; case 3: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		/* if (!gl.GetShaderParameterb(shader, $parseInt(gl.Object.COMPILE_STATUS) >> 0)) { */ case 1:
+			$r = fail("Error compiling shader: " + gl.GetShaderInfoLog(shader)); /* */ $s = 3; case 3: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 			return null;
 		/* } */ case 2:
-		return shader$1;
-		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: createShader }; } $f.$ptr = $ptr; $f.kind = kind; $f.shader$1 = shader$1; $f.source = source; $f.$s = $s; $f.$r = $r; return $f;
+		return shader;
+		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: createShader }; } $f.$ptr = $ptr; $f.kind = kind; $f.shader = shader; $f.source = source; $f.$s = $s; $f.$r = $r; return $f;
 	};
 	loadShaderAsset = function(asset, done) {
-		var $ptr, _arg, _arg$1, _r, _r$1, _r$2, _r$3, asset, done, frag, fragShader, fragSource, shader$1, vert, vertShader, vertSource, $s, $deferred, $r;
-		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; _arg = $f._arg; _arg$1 = $f._arg$1; _r = $f._r; _r$1 = $f._r$1; _r$2 = $f._r$2; _r$3 = $f._r$3; asset = $f.asset; done = $f.done; frag = $f.frag; fragShader = $f.fragShader; fragSource = $f.fragSource; shader$1 = $f.shader$1; vert = $f.vert; vertShader = $f.vertShader; vertSource = $f.vertSource; $s = $f.$s; $deferred = $f.$deferred; $r = $f.$r; } var $err = null; try { s: while (true) { switch ($s) { case 0: $deferred = []; $deferred.index = $curGoroutine.deferStack.length; $curGoroutine.deferStack.push($deferred);
+		var $ptr, _arg, _arg$1, _r, _r$1, _r$2, _r$3, asset, done, frag, fragShader, fragSource, shader, vert, vertShader, vertSource, $s, $deferred, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; _arg = $f._arg; _arg$1 = $f._arg$1; _r = $f._r; _r$1 = $f._r$1; _r$2 = $f._r$2; _r$3 = $f._r$3; asset = $f.asset; done = $f.done; frag = $f.frag; fragShader = $f.fragShader; fragSource = $f.fragSource; shader = $f.shader; vert = $f.vert; vertShader = $f.vertShader; vertSource = $f.vertSource; $s = $f.$s; $deferred = $f.$deferred; $r = $f.$r; } var $err = null; try { s: while (true) { switch ($s) { case 0: $deferred = []; $deferred.index = $curGoroutine.deferStack.length; $curGoroutine.deferStack.push($deferred);
 		vert = new chanType(0);
 		frag = new chanType(0);
 		$deferred.push([function(_arg) { $close(_arg); }, [vert]]);
@@ -21377,19 +21393,19 @@ $packages["main"] = (function() {
 		vertShader = _r$2;
 		_r$3 = createShader(fragSource, $parseInt(gl.Object.FRAGMENT_SHADER) >> 0); /* */ $s = 4; case 4: if($c) { $c = false; _r$3 = _r$3.$blk(); } if (_r$3 && _r$3.$blk !== undefined) { break s; }
 		fragShader = _r$3;
-		shader$1 = gl.CreateProgram();
-		gl.AttachShader(shader$1, vertShader);
-		gl.AttachShader(shader$1, fragShader);
-		gl.LinkProgram(shader$1);
-		/* */ if (!gl.GetProgramParameterb(shader$1, $parseInt(gl.Object.LINK_STATUS) >> 0)) { $s = 5; continue; }
+		shader = gl.CreateProgram();
+		gl.AttachShader(shader, vertShader);
+		gl.AttachShader(shader, fragShader);
+		gl.LinkProgram(shader);
+		/* */ if (!gl.GetProgramParameterb(shader, $parseInt(gl.Object.LINK_STATUS) >> 0)) { $s = 5; continue; }
 		/* */ $s = 6; continue;
-		/* if (!gl.GetProgramParameterb(shader$1, $parseInt(gl.Object.LINK_STATUS) >> 0)) { */ case 5:
+		/* if (!gl.GetProgramParameterb(shader, $parseInt(gl.Object.LINK_STATUS) >> 0)) { */ case 5:
 			$r = fail("Unable to initiaize shader program"); /* */ $s = 7; case 7: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 			return;
 		/* } */ case 6:
-		asset.shader.$set(shader$1);
+		asset.shader.$set(shader);
 		$r = $send(done, asset.vertFile + " " + asset.fragFile); /* */ $s = 8; case 8: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
-		/* */ $s = -1; case -1: } return; } } catch(err) { $err = err; $s = -1; } finally { $callDeferred($deferred, $err); if($curGoroutine.asleep) { if ($f === undefined) { $f = { $blk: loadShaderAsset }; } $f.$ptr = $ptr; $f._arg = _arg; $f._arg$1 = _arg$1; $f._r = _r; $f._r$1 = _r$1; $f._r$2 = _r$2; $f._r$3 = _r$3; $f.asset = asset; $f.done = done; $f.frag = frag; $f.fragShader = fragShader; $f.fragSource = fragSource; $f.shader$1 = shader$1; $f.vert = vert; $f.vertShader = vertShader; $f.vertSource = vertSource; $f.$s = $s; $f.$deferred = $deferred; $f.$r = $r; return $f; } }
+		/* */ $s = -1; case -1: } return; } } catch(err) { $err = err; $s = -1; } finally { $callDeferred($deferred, $err); if($curGoroutine.asleep) { if ($f === undefined) { $f = { $blk: loadShaderAsset }; } $f.$ptr = $ptr; $f._arg = _arg; $f._arg$1 = _arg$1; $f._r = _r; $f._r$1 = _r$1; $f._r$2 = _r$2; $f._r$3 = _r$3; $f.asset = asset; $f.done = done; $f.frag = frag; $f.fragShader = fragShader; $f.fragSource = fragSource; $f.shader = shader; $f.vert = vert; $f.vertShader = vertShader; $f.vertSource = vertSource; $f.$s = $s; $f.$deferred = $deferred; $f.$r = $r; return $f; } }
 	};
 	loadTextureAsset = function(asset, done) {
 		var $ptr, _arg, _r, asset, done, image, img, texture, $s, $deferred, $r;
@@ -21414,7 +21430,7 @@ $packages["main"] = (function() {
 	ptrType$4.methods = [{prop: "Name", name: "Name", pkg: "", typ: $funcType([], [$String], false)}, {prop: "OnEnter", name: "OnEnter", pkg: "", typ: $funcType([], [], false)}, {prop: "OnExit", name: "OnExit", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([], [], false)}, {prop: "Draw", name: "Draw", pkg: "", typ: $funcType([], [], false)}];
 	ptrType$5.methods = [{prop: "Name", name: "Name", pkg: "", typ: $funcType([], [$String], false)}, {prop: "OnEnter", name: "OnEnter", pkg: "", typ: $funcType([], [], false)}, {prop: "OnExit", name: "OnExit", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([], [], false)}, {prop: "Draw", name: "Draw", pkg: "", typ: $funcType([], [], false)}];
 	ptrType$6.methods = [{prop: "Name", name: "Name", pkg: "", typ: $funcType([], [$String], false)}, {prop: "OnEnter", name: "OnEnter", pkg: "", typ: $funcType([], [], false)}, {prop: "OnExit", name: "OnExit", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([], [], false)}, {prop: "Draw", name: "Draw", pkg: "", typ: $funcType([], [], false)}];
-	ptrType$8.methods = [{prop: "Name", name: "Name", pkg: "", typ: $funcType([], [$String], false)}, {prop: "OnEnter", name: "OnEnter", pkg: "", typ: $funcType([], [], false)}, {prop: "OnExit", name: "OnExit", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([], [], false)}, {prop: "Draw", name: "Draw", pkg: "", typ: $funcType([], [], false)}];
+	ptrType$8.methods = [{prop: "Name", name: "Name", pkg: "", typ: $funcType([], [$String], false)}, {prop: "OnEnter", name: "OnEnter", pkg: "", typ: $funcType([], [], false)}, {prop: "OnExit", name: "OnExit", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([], [], false)}, {prop: "Draw", name: "Draw", pkg: "", typ: $funcType([], [], false)}, {prop: "drawButtons", name: "drawButtons", pkg: "main", typ: $funcType([], [], false)}];
 	ptrType$7.methods = [{prop: "draw", name: "draw", pkg: "main", typ: $funcType([], [], false)}];
 	shaderAsset.init([{prop: "vertFile", name: "vertFile", pkg: "main", typ: $String, tag: ""}, {prop: "fragFile", name: "fragFile", pkg: "main", typ: $String, tag: ""}, {prop: "shader", name: "shader", pkg: "main", typ: ptrType$3, tag: ""}]);
 	textureAsset.init([{prop: "textureFile", name: "textureFile", pkg: "main", typ: $String, tag: ""}, {prop: "texture", name: "texture", pkg: "main", typ: ptrType$3, tag: ""}]);
@@ -21424,8 +21440,8 @@ $packages["main"] = (function() {
 	inputType.init([{prop: "mouse", name: "", pkg: "main", typ: mouse, tag: ""}]);
 	mouse.init([{prop: "pos", name: "pos", pkg: "main", typ: mgl32.Vec2, tag: ""}, {prop: "leftDown", name: "leftDown", pkg: "main", typ: $Bool, tag: ""}, {prop: "rightDown", name: "rightDown", pkg: "main", typ: $Bool, tag: ""}]);
 	loadState.init([{prop: "totalAssets", name: "totalAssets", pkg: "main", typ: $Int, tag: ""}, {prop: "assetsLoaded", name: "assetsLoaded", pkg: "main", typ: $Int, tag: ""}, {prop: "loadChannel", name: "loadChannel", pkg: "main", typ: chanType, tag: ""}]);
-	menuState.init([{prop: "newButton", name: "newButton", pkg: "main", typ: ptrType$7, tag: ""}]);
-	menuNewButton.init([{prop: "vertBuffer", name: "vertBuffer", pkg: "main", typ: ptrType$2, tag: ""}, {prop: "texCoordBuffer", name: "texCoordBuffer", pkg: "main", typ: ptrType$2, tag: ""}, {prop: "vertAttr", name: "vertAttr", pkg: "main", typ: $Int, tag: ""}, {prop: "texAttr", name: "texAttr", pkg: "main", typ: $Int, tag: ""}]);
+	menuState.init([{prop: "buttons", name: "buttons", pkg: "main", typ: arrayType$1, tag: ""}]);
+	menuButton.init([{prop: "vertBuffer", name: "vertBuffer", pkg: "main", typ: ptrType$2, tag: ""}, {prop: "texCoordBuffer", name: "texCoordBuffer", pkg: "main", typ: ptrType$2, tag: ""}, {prop: "vertAttr", name: "vertAttr", pkg: "main", typ: $Int, tag: ""}, {prop: "texAttr", name: "texAttr", pkg: "main", typ: $Int, tag: ""}, {prop: "img", name: "img", pkg: "main", typ: mgl32.Vec4, tag: ""}]);
 	$init = function() {
 		$pkg.$init = function() {};
 		/* */ var $f, $c = false, $s = 0, $r; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
@@ -21435,18 +21451,22 @@ $packages["main"] = (function() {
 		$r = webgl.$init(); /* */ $s = 4; case 4: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 		uiShader = null;
 		uiTexture = null;
+		perspectiveMatrix = mgl32.Mat4.zero();
+		squareVerticesBuffer = null;
+		vPositionAttr = 0;
+		mvMatrix = mgl32.Mat4.zero();
+		loadShader = null;
 		document = null;
 		canvas = null;
 		gl = ptrType.nil;
 		mainSm = ptrType$1.nil;
-		squareVerticesBuffer = null;
-		vPositionAttr = 0;
-		perspectiveMatrix = mgl32.Mat4.zero();
-		mvMatrix = mgl32.Mat4.zero();
-		shader = null;
 		shaderAssets = new sliceType([new shaderAsset.ptr("ui.vert", "ui.frag", (uiShader_ptr || (uiShader_ptr = new ptrType$3(function() { return uiShader; }, function($v) { uiShader = $v; }))))]);
 		textureAssets = new sliceType$1([new textureAsset.ptr("ui.png", (uiTexture_ptr || (uiTexture_ptr = new ptrType$3(function() { return uiTexture; }, function($v) { uiTexture = $v; }))))]);
 		$pkg.VIEW_ANGLE = mgl32.DegToRad(45);
+		$pkg.MENU_NEW_RECT = $toNativeArray($kindFloat32, [-0.75, 1, 0.5, 0.125]);
+		$pkg.MENU_NEW_IMG = $toNativeArray($kindFloat32, [0, 0.75, 1, 0.25]);
+		$pkg.MENU_CONT_RECT = $toNativeArray($kindFloat32, [0.75, 1, 0.5, 0.125]);
+		$pkg.MENU_CONT_IMG = $toNativeArray($kindFloat32, [0, 0.5, 1, 0.25]);
 		mainFailedState = new failedState.ptr();
 		mainInitState = new initState.ptr();
 		input = new inputType.ptr();
