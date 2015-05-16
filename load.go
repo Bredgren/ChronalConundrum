@@ -19,7 +19,7 @@ type loadState struct {
 	totalAssets  int
 	assetsLoaded int
 	loadChannel  chan string
-	bar *loadBar
+	bar          *loadBar
 }
 
 func (s *loadState) Name() string {
@@ -87,8 +87,8 @@ func (s *loadState) Draw(timestamp float64) {
 
 type loadBar struct {
 	vertBuffer *js.Object
-	shader *js.Object
-	posAttr int
+	shader     *js.Object
+	posAttr    int
 }
 
 func newLoadBar() *loadBar {
@@ -96,10 +96,10 @@ func newLoadBar() *loadBar {
 	h := float32(canvas.Get("height").Float())
 	rect := mgl32.Vec4{-1.0, -1.0, w, h}
 	vertices := []float32{
-		rect.X() - rect[2] / 2.0, rect.Y() - rect[3] / 2.0,
-		rect.X() + rect[2] / 2.0, rect.Y() - rect[3] / 2.0,
-		rect.X() - rect[2] / 2.0, rect.Y() + rect[3] / 2.0,
-		rect.X() + rect[2] / 2.0, rect.Y() + rect[3] / 2.0,
+		rect.X() - rect[2]/2.0, rect.Y() - rect[3]/2.0,
+		rect.X() + rect[2]/2.0, rect.Y() - rect[3]/2.0,
+		rect.X() - rect[2]/2.0, rect.Y() + rect[3]/2.0,
+		rect.X() + rect[2]/2.0, rect.Y() + rect[3]/2.0,
 	}
 
 	var buf *js.Object = gl.CreateBuffer()
@@ -115,7 +115,7 @@ uniform mat4 uPMatrix;
 void main(void) {
   gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
 }`, gl.VERTEX_SHADER)
-	 var fragShader *js.Object = createShader(`
+	var fragShader *js.Object = createShader(`
 precision mediump float;
 
 uniform float uPercent;

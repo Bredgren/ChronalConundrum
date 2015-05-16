@@ -6,5 +6,5 @@ import (
 
 var (
 	perspectiveMatrix mgl32.Mat4
-	mvMatrix mgl32.Mat4
+	mvMatrix          mgl32.Mat4
 )
