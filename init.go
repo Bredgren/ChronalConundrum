@@ -32,12 +32,12 @@ func (s *initState) OnExit() {
 	println("not implemented")
 }
 
-func (s *initState) Update() {
+func (s *initState) Update(timestamp float64) {
 	// Must do this here instead of the end of OnEnter because mainSm isn't initalized
 	mainSm.GotoState(mainLoadState)
 }
 
-func (s *initState) Draw() {
+func (s *initState) Draw(timestamp float64) {
 	// Don't need to draw anything
 }
 

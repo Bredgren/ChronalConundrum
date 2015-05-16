@@ -25,10 +25,10 @@ func (s *failedState) OnExit() {
 	println("failedState.OnExit")
 }
 
-func (s *failedState) Update() {
+func (s *failedState) Update(timestamp float64) {
 }
 
-func (s *failedState) Draw() {
+func (s *failedState) Draw(timestamp float64) {
 }
 
 func fail(message string) {

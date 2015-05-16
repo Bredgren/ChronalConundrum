@@ -30,10 +30,10 @@ func (s *menuState) OnExit() {
 	println("not implemented")
 }
 
-func (s *menuState) Update() {
+func (s *menuState) Update(timestamp float64) {
 }
 
-func (s *menuState) Draw() {
+func (s *menuState) Draw(timestamp float64) {
 	s.drawButtons()
 }
 

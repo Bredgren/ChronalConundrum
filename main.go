@@ -1,6 +1,8 @@
 package main
 
 import (
+	"time"
+
 	"github.com/Bredgren/fsm"
 	"github.com/gopherjs/gopherjs/js"
 	"github.com/gopherjs/webgl"
@@ -11,6 +13,7 @@ var (
 	document *js.Object
 	canvas   *js.Object
 	gl       *webgl.Context
+	prevTime time.Time
 	// mainSm is the overarching state machine for the game. Possible states are
 	// initState, loadState, menuState, playState, failedState
 	mainSm *fsm.Fsm
@@ -30,16 +33,17 @@ func onWindowResize() {
 	clearWindow()
 }
 
-func mainLoop() {
+func mainLoop(timestamp float64) {
 	currentState := mainSm.CurrentState.(mainState)
-	currentState.Update()
+	currentState.Update(timestamp)
 	if mainSm.CurrentState.(mainState) != currentState {
 		// We switched states in the update
 		currentState = mainSm.CurrentState.(mainState)
-		currentState.Update()
+		currentState.Update(timestamp)
 	}
 	clearWindow()
-	currentState.Draw()
+	currentState.Draw(timestamp)
+	gl.Flush()
 
 	if currentState != mainFailedState {
 		js.Global.Call("requestAnimationFrame", mainLoop)
