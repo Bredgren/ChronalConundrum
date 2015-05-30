@@ -37,7 +37,7 @@ func (s *loadState) OnEnter() {
 	s.totalAssets = len(shaderAssets)
 	s.totalAssets += len(textureAssets)
 	// s.totalAssets += len(soundAssets)
-	// s.totalAssets += len(modelAssets)
+	s.totalAssets += len(modelAssets)
 	// fakeCount := 10
 	// s.totalAssets += fakeCount
 
@@ -47,6 +47,10 @@ func (s *loadState) OnEnter() {
 
 	for _, asset := range textureAssets {
 		go loadTextureAsset(&asset, s.loadChannel)
+	}
+
+	for _, asset := range modelAssets {
+		go loadModelAsset(&asset, s.loadChannel)
 	}
 
 	// for i := 0; i < fakeCount; i++ {

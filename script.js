@@ -20816,7 +20816,7 @@ $packages["github.com/gopherjs/webgl"] = (function() {
 	return $pkg;
 })();
 $packages["main"] = (function() {
-	var $pkg = {}, $init, fsm, mgl32, js, webgl, time, shaderAsset, textureAsset, failedState, mainState, initState, inputType, mouse, loadState, loadBar, menuState, menuButton, ptrType, ptrType$1, sliceType, ptrType$2, ptrType$3, sliceType$1, funcType, funcType$1, funcType$2, chanType, sliceType$2, arrayType, funcType$3, chanType$1, ptrType$4, ptrType$5, ptrType$6, ptrType$7, ptrType$8, arrayType$1, ptrType$9, uiShader, uiShader_ptr, shaderAssets, uiTexture, uiTexture_ptr, textureAssets, perspectiveMatrix, mvMatrix, mainFailedState, mainInitState, input, mainLoadState, document, canvas, gl, mainSm, mainMenuState, retrieveFile, retrieveImage, fail, initCanvas, initWebGl, onMouseMove, onMouseDown, onMouseUp, newLoadBar, clearWindow, onWindowResize, mainLoop, onBodyLoad, main, newMenuButton, createShader, loadShaderAsset, loadTextureAsset;
+	var $pkg = {}, $init, fsm, mgl32, js, webgl, time, shaderAsset, textureAsset, modelAsset, failedState, mainState, initState, inputType, mouse, loadState, loadBar, menuState, menuButton, ptrType, ptrType$1, sliceType, ptrType$2, ptrType$3, sliceType$1, sliceType$2, funcType, funcType$1, funcType$2, chanType, sliceType$3, arrayType, funcType$3, chanType$1, ptrType$4, ptrType$5, ptrType$6, ptrType$7, ptrType$8, arrayType$1, ptrType$9, uiShader, uiShader_ptr, shaderAssets, uiTexture, uiTexture_ptr, textureAssets, shipModel, shipModel_ptr, modelAssets, perspectiveMatrix, mvMatrix, mainFailedState, mainInitState, input, mainLoadState, document, canvas, gl, mainSm, mainMenuState, retrieveFile, retrieveImage, fail, initCanvas, initWebGl, onMouseMove, onMouseDown, onMouseUp, newLoadBar, clearWindow, onWindowResize, mainLoop, onBodyLoad, main, newMenuButton, loadModelAsset, createShader, loadShaderAsset, loadTextureAsset;
 	fsm = $packages["github.com/Bredgren/fsm"];
 	mgl32 = $packages["github.com/go-gl/mathgl/mgl32"];
 	js = $packages["github.com/gopherjs/gopherjs/js"];
@@ -20843,6 +20843,16 @@ $packages["main"] = (function() {
 		}
 		this.textureFile = textureFile_;
 		this.texture = texture_;
+	});
+	modelAsset = $pkg.modelAsset = $newType(0, $kindStruct, "main.modelAsset", "modelAsset", "main", function(jsonFile_, model_) {
+		this.$val = this;
+		if (arguments.length === 0) {
+			this.jsonFile = "";
+			this.model = ptrType$3.nil;
+			return;
+		}
+		this.jsonFile = jsonFile_;
+		this.model = model_;
 	});
 	failedState = $pkg.failedState = $newType(0, $kindStruct, "main.failedState", "failedState", "main", function(reason_) {
 		this.$val = this;
@@ -20935,11 +20945,12 @@ $packages["main"] = (function() {
 	ptrType$2 = $ptrType(js.Object);
 	ptrType$3 = $ptrType(ptrType$2);
 	sliceType$1 = $sliceType(textureAsset);
+	sliceType$2 = $sliceType(modelAsset);
 	funcType = $funcType([], [], false);
 	funcType$1 = $funcType([ptrType$2], [], false);
 	funcType$2 = $funcType([], [$Bool], false);
 	chanType = $chanType($String, false, false);
-	sliceType$2 = $sliceType($Float32);
+	sliceType$3 = $sliceType($Float32);
 	arrayType = $arrayType($Float32, 16);
 	funcType$3 = $funcType([$Float64], [], false);
 	chanType$1 = $chanType(ptrType$2, false, false);
@@ -20952,7 +20963,7 @@ $packages["main"] = (function() {
 	ptrType$9 = $ptrType(menuState);
 	retrieveFile = function(fileName, contents) {
 		var $ptr, contents, fileName, xmlHttp;
-		console.log("retrieving shader", fileName);
+		console.log("retrieving file", fileName);
 		xmlHttp = new ($global.XMLHttpRequest)();
 		xmlHttp.open($externalize("GET", $String), $externalize(fileName, $String), $externalize(true, $Bool));
 		xmlHttp.onload = $externalize((function() {
@@ -20966,7 +20977,7 @@ $packages["main"] = (function() {
 					$r = $send(contents, $internalize(xmlHttp.responseText, $String)); /* */ $s = 4; case 4: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 					$s = 3; continue;
 				/* } else { */ case 2:
-					$r = fail("Failed to load shader " + fileName); /* */ $s = 5; case 5: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+					$r = fail("Failed to retrieve file " + fileName); /* */ $s = 5; case 5: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 				/* } */ case 3:
 				/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: $b }; } $f.$ptr = $ptr; $f.$s = $s; $f.$r = $r; return $f;
 			}), []);
@@ -21142,8 +21153,8 @@ $packages["main"] = (function() {
 	};
 	loadState.prototype.Name = function() { return this.$val.Name(); };
 	loadState.ptr.prototype.OnEnter = function() {
-		var $ptr, _i, _i$1, _r, _ref, _ref$1, asset, asset$1, s, $s, $r;
-		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; _i = $f._i; _i$1 = $f._i$1; _r = $f._r; _ref = $f._ref; _ref$1 = $f._ref$1; asset = $f.asset; asset$1 = $f.asset$1; s = $f.s; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+		var $ptr, _i, _i$1, _i$2, _r, _ref, _ref$1, _ref$2, asset, asset$1, asset$2, s, $s, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; _i = $f._i; _i$1 = $f._i$1; _i$2 = $f._i$2; _r = $f._r; _ref = $f._ref; _ref$1 = $f._ref$1; _ref$2 = $f._ref$2; asset = $f.asset; asset$1 = $f.asset$1; asset$2 = $f.asset$2; s = $f.s; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
 		s = this;
 		console.log("loadState.OnEnter");
 		_r = newLoadBar(); /* */ $s = 1; case 1: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
@@ -21153,6 +21164,7 @@ $packages["main"] = (function() {
 		}
 		s.totalAssets = shaderAssets.$length;
 		s.totalAssets = s.totalAssets + (textureAssets.$length) >> 0;
+		s.totalAssets = s.totalAssets + (modelAssets.$length) >> 0;
 		_ref = shaderAssets;
 		_i = 0;
 		while (true) {
@@ -21169,7 +21181,15 @@ $packages["main"] = (function() {
 			$go(loadTextureAsset, [asset$1, s.loadChannel]);
 			_i$1++;
 		}
-		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: loadState.ptr.prototype.OnEnter }; } $f.$ptr = $ptr; $f._i = _i; $f._i$1 = _i$1; $f._r = _r; $f._ref = _ref; $f._ref$1 = _ref$1; $f.asset = asset; $f.asset$1 = asset$1; $f.s = s; $f.$s = $s; $f.$r = $r; return $f;
+		_ref$2 = modelAssets;
+		_i$2 = 0;
+		while (true) {
+			if (!(_i$2 < _ref$2.$length)) { break; }
+			asset$2 = $clone(((_i$2 < 0 || _i$2 >= _ref$2.$length) ? $throwRuntimeError("index out of range") : _ref$2.$array[_ref$2.$offset + _i$2]), modelAsset);
+			$go(loadModelAsset, [asset$2, s.loadChannel]);
+			_i$2++;
+		}
+		/* */ $s = -1; case -1: } return; } if ($f === undefined) { $f = { $blk: loadState.ptr.prototype.OnEnter }; } $f.$ptr = $ptr; $f._i = _i; $f._i$1 = _i$1; $f._i$2 = _i$2; $f._r = _r; $f._ref = _ref; $f._ref$1 = _ref$1; $f._ref$2 = _ref$2; $f.asset = asset; $f.asset$1 = asset$1; $f.asset$2 = asset$2; $f.s = s; $f.$s = $s; $f.$r = $r; return $f;
 	};
 	loadState.prototype.OnEnter = function() { return this.$val.OnEnter(); };
 	loadState.ptr.prototype.OnExit = function() {
@@ -21210,7 +21230,7 @@ $packages["main"] = (function() {
 		w = $fround($parseFloat(canvas.width));
 		h = $fround($parseFloat(canvas.height));
 		rect = $toNativeArray($kindFloat32, [-1, -1, w, h]);
-		vertices = new sliceType$2([$fround(new mgl32.Vec4(rect).X() - $fround(rect[2] / 2)), $fround(new mgl32.Vec4(rect).Y() - $fround(rect[3] / 2)), $fround(new mgl32.Vec4(rect).X() + $fround(rect[2] / 2)), $fround(new mgl32.Vec4(rect).Y() - $fround(rect[3] / 2)), $fround(new mgl32.Vec4(rect).X() - $fround(rect[2] / 2)), $fround(new mgl32.Vec4(rect).Y() + $fround(rect[3] / 2)), $fround(new mgl32.Vec4(rect).X() + $fround(rect[2] / 2)), $fround(new mgl32.Vec4(rect).Y() + $fround(rect[3] / 2))]);
+		vertices = new sliceType$3([$fround(new mgl32.Vec4(rect).X() - $fround(rect[2] / 2)), $fround(new mgl32.Vec4(rect).Y() - $fround(rect[3] / 2)), $fround(new mgl32.Vec4(rect).X() + $fround(rect[2] / 2)), $fround(new mgl32.Vec4(rect).Y() - $fround(rect[3] / 2)), $fround(new mgl32.Vec4(rect).X() - $fround(rect[2] / 2)), $fround(new mgl32.Vec4(rect).Y() + $fround(rect[3] / 2)), $fround(new mgl32.Vec4(rect).X() + $fround(rect[2] / 2)), $fround(new mgl32.Vec4(rect).Y() + $fround(rect[3] / 2))]);
 		buf = gl.CreateBuffer();
 		gl.BindBuffer($parseInt(gl.Object.ARRAY_BUFFER) >> 0, buf);
 		gl.BufferData($parseInt(gl.Object.ARRAY_BUFFER) >> 0, vertices, $parseInt(gl.Object.STATIC_DRAW) >> 0);
@@ -21243,10 +21263,10 @@ $packages["main"] = (function() {
 		$copy(mvMatrix, new mgl32.Mat4(mvMatrix).Mul4(mgl32.Translate3D(0, 0, -6)), mgl32.Mat4);
 		pUniform = gl.GetUniformLocation(b.shader, "uPMatrix");
 		pm = $clone($clone(perspectiveMatrix, arrayType), arrayType);
-		gl.UniformMatrix4fv(pUniform, false, new sliceType$2(pm));
+		gl.UniformMatrix4fv(pUniform, false, new sliceType$3(pm));
 		mvUniform = gl.GetUniformLocation(b.shader, "uMVMatrix");
 		mvm = $clone($clone(mvMatrix, arrayType), arrayType);
-		gl.UniformMatrix4fv(mvUniform, false, new sliceType$2(mvm));
+		gl.UniformMatrix4fv(mvUniform, false, new sliceType$3(mvm));
 		gl.Uniform1f(gl.GetUniformLocation(b.shader, "uPercent"), $fround(percent));
 		w = $fround($parseFloat(canvas.width));
 		h = $fround($parseFloat(canvas.height));
@@ -21355,8 +21375,8 @@ $packages["main"] = (function() {
 		var $ptr, buf, img, rect, tex, texAttr, texCoords, vertAttr, vertices;
 		img = $clone(img, mgl32.Vec4);
 		rect = $clone(rect, mgl32.Vec4);
-		vertices = new sliceType$2([$fround(new mgl32.Vec4(rect).X() - rect[2]), $fround(new mgl32.Vec4(rect).Y() - rect[3]), $fround(new mgl32.Vec4(rect).X() + rect[2]), $fround(new mgl32.Vec4(rect).Y() - rect[3]), $fround(new mgl32.Vec4(rect).X() - rect[2]), $fround(new mgl32.Vec4(rect).Y() + rect[3]), $fround(new mgl32.Vec4(rect).X() + rect[2]), $fround(new mgl32.Vec4(rect).Y() + rect[3])]);
-		texCoords = new sliceType$2([0, 0, 1, 0, 0, 1, 1, 1]);
+		vertices = new sliceType$3([$fround(new mgl32.Vec4(rect).X() - rect[2]), $fround(new mgl32.Vec4(rect).Y() - rect[3]), $fround(new mgl32.Vec4(rect).X() + rect[2]), $fround(new mgl32.Vec4(rect).Y() - rect[3]), $fround(new mgl32.Vec4(rect).X() - rect[2]), $fround(new mgl32.Vec4(rect).Y() + rect[3]), $fround(new mgl32.Vec4(rect).X() + rect[2]), $fround(new mgl32.Vec4(rect).Y() + rect[3])]);
+		texCoords = new sliceType$3([0, 0, 1, 0, 0, 1, 1, 1]);
 		buf = gl.CreateBuffer();
 		gl.BindBuffer($parseInt(gl.Object.ARRAY_BUFFER) >> 0, buf);
 		gl.BufferData($parseInt(gl.Object.ARRAY_BUFFER) >> 0, vertices, $parseInt(gl.Object.STATIC_DRAW) >> 0);
@@ -21380,16 +21400,27 @@ $packages["main"] = (function() {
 		$copy(mvMatrix, new mgl32.Mat4(mvMatrix).Mul4(mgl32.Translate3D(0, 0, -6)), mgl32.Mat4);
 		pUniform = gl.GetUniformLocation(uiShader, "uPMatrix");
 		pm = $clone($clone(perspectiveMatrix, arrayType), arrayType);
-		gl.UniformMatrix4fv(pUniform, false, new sliceType$2(pm));
+		gl.UniformMatrix4fv(pUniform, false, new sliceType$3(pm));
 		mvUniform = gl.GetUniformLocation(uiShader, "uMVMatrix");
 		mvm = $clone($clone(mvMatrix, arrayType), arrayType);
-		gl.UniformMatrix4fv(mvUniform, false, new sliceType$2(mvm));
+		gl.UniformMatrix4fv(mvUniform, false, new sliceType$3(mvm));
 		gl.BindTexture($parseInt(gl.Object.TEXTURE_2D) >> 0, uiTexture);
 		gl.Uniform1i(gl.GetUniformLocation(uiShader, "uSampler"), $parseInt(uiTexture) >> 0);
 		gl.Uniform4f(gl.GetUniformLocation(uiShader, "uRect"), b.img[0], b.img[1], b.img[2], b.img[3]);
 		gl.DrawArrays($parseInt(gl.Object.TRIANGLE_STRIP) >> 0, 0, 4);
 	};
 	menuButton.prototype.draw = function() { return this.$val.draw(); };
+	loadModelAsset = function(asset, done) {
+		var $ptr, _arg, _r, asset, done, file, jsonFile, $s, $deferred, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; _arg = $f._arg; _r = $f._r; asset = $f.asset; done = $f.done; file = $f.file; jsonFile = $f.jsonFile; $s = $f.$s; $deferred = $f.$deferred; $r = $f.$r; } var $err = null; try { s: while (true) { switch ($s) { case 0: $deferred = []; $deferred.index = $curGoroutine.deferStack.length; $curGoroutine.deferStack.push($deferred);
+		file = new chanType(0);
+		$deferred.push([function(_arg) { $close(_arg); }, [file]]);
+		retrieveFile(asset.jsonFile, file);
+		_r = $recv(file); /* */ $s = 1; case 1: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
+		jsonFile = _r[0];
+		$r = $send(done, asset.jsonFile); /* */ $s = 2; case 2: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		/* */ $s = -1; case -1: } return; } } catch(err) { $err = err; $s = -1; } finally { $callDeferred($deferred, $err); if($curGoroutine.asleep) { if ($f === undefined) { $f = { $blk: loadModelAsset }; } $f.$ptr = $ptr; $f._arg = _arg; $f._r = _r; $f.asset = asset; $f.done = done; $f.file = file; $f.jsonFile = jsonFile; $f.$s = $s; $f.$deferred = $deferred; $f.$r = $r; return $f; } }
+	};
 	createShader = function(source, kind) {
 		var $ptr, kind, shader, source, $s, $r;
 		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $ptr = $f.$ptr; kind = $f.kind; shader = $f.shader; source = $f.source; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
@@ -21464,6 +21495,7 @@ $packages["main"] = (function() {
 	ptrType$8.methods = [{prop: "draw", name: "draw", pkg: "main", typ: $funcType([], [], false)}];
 	shaderAsset.init([{prop: "vertFile", name: "vertFile", pkg: "main", typ: $String, tag: ""}, {prop: "fragFile", name: "fragFile", pkg: "main", typ: $String, tag: ""}, {prop: "shader", name: "shader", pkg: "main", typ: ptrType$3, tag: ""}]);
 	textureAsset.init([{prop: "textureFile", name: "textureFile", pkg: "main", typ: $String, tag: ""}, {prop: "texture", name: "texture", pkg: "main", typ: ptrType$3, tag: ""}]);
+	modelAsset.init([{prop: "jsonFile", name: "jsonFile", pkg: "main", typ: $String, tag: ""}, {prop: "model", name: "model", pkg: "main", typ: ptrType$3, tag: ""}]);
 	failedState.init([{prop: "reason", name: "reason", pkg: "main", typ: $String, tag: ""}]);
 	mainState.init([{prop: "Draw", name: "Draw", pkg: "", typ: $funcType([$Float64], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([$Float64], [], false)}]);
 	initState.init([]);
@@ -21483,6 +21515,7 @@ $packages["main"] = (function() {
 		$r = time.$init(); /* */ $s = 5; case 5: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 		uiShader = null;
 		uiTexture = null;
+		shipModel = null;
 		perspectiveMatrix = mgl32.Mat4.zero();
 		mvMatrix = mgl32.Mat4.zero();
 		document = null;
@@ -21491,6 +21524,7 @@ $packages["main"] = (function() {
 		mainSm = ptrType$1.nil;
 		shaderAssets = new sliceType([new shaderAsset.ptr("ui.vert", "ui.frag", (uiShader_ptr || (uiShader_ptr = new ptrType$3(function() { return uiShader; }, function($v) { uiShader = $v; }))))]);
 		textureAssets = new sliceType$1([new textureAsset.ptr("ui.png", (uiTexture_ptr || (uiTexture_ptr = new ptrType$3(function() { return uiTexture; }, function($v) { uiTexture = $v; }))))]);
+		modelAssets = new sliceType$2([new modelAsset.ptr("model/ship.json", (shipModel_ptr || (shipModel_ptr = new ptrType$3(function() { return shipModel; }, function($v) { shipModel = $v; }))))]);
 		$pkg.VIEW_ANGLE = mgl32.DegToRad(45);
 		$pkg.MENU_NEW_RECT = $toNativeArray($kindFloat32, [-0.75, 1, 0.5, 0.125]);
 		$pkg.MENU_NEW_IMG = $toNativeArray($kindFloat32, [0, 0.75, 1, 0.25]);

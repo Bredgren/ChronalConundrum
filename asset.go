@@ -34,11 +34,22 @@ type textureAsset struct {
 // Sounds
 
 // Models
+var (
+	shipModel *js.Object
+	modelAssets = []modelAsset{
+		{"model/ship.json", &shipModel},
+	}
+)
+
+type modelAsset struct {
+	jsonFile string
+	model **js.Object
+}
 
 // retrieveFile asyncronously gets the contents of the given file and returns it
 // through the given channel.
 func retrieveFile(fileName string, contents chan<- string) {
-	println("retrieving shader", fileName)
+	println("retrieving file", fileName)
 	var xmlHttp *js.Object = js.Global.Get("XMLHttpRequest").New()
 	xmlHttp.Call("open", "GET", fileName, true)
 	xmlHttp.Set("onload", func() {
@@ -46,7 +57,7 @@ func retrieveFile(fileName string, contents chan<- string) {
 			if xmlHttp.Get("readyState").Int() == 4 && xmlHttp.Get("status").Int() == 200 {
 				contents <- xmlHttp.Get("responseText").String()
 			} else {
-				fail("Failed to load shader " + fileName)
+				fail("Failed to retrieve file " + fileName)
 			}
 		}()
 	})
