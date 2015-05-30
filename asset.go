@@ -35,7 +35,7 @@ type textureAsset struct {
 
 // Models
 var (
-	shipModel *js.Object
+	shipModel   *js.Object
 	modelAssets = []modelAsset{
 		{"model/ship.json", &shipModel},
 	}
@@ -43,7 +43,7 @@ var (
 
 type modelAsset struct {
 	jsonFile string
-	model **js.Object
+	model    **js.Object
 }
 
 // retrieveFile asyncronously gets the contents of the given file and returns it

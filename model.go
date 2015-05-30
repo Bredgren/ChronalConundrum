@@ -1,7 +1,7 @@
 package main
 
 import (
-	// "github.com/gopherjs/gopherjs/js"
+// "github.com/gopherjs/gopherjs/js"
 )
 
 // loadModelAsset takes the given modelAsset, loads the json file it specifies,
