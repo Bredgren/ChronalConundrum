@@ -73,11 +73,11 @@ func (s *menuState) drawShip() {
 
 	gl.BindBuffer(gl.ARRAY_BUFFER, ship1Verts)
 	var position int = gl.GetAttribLocation(shipShader, "aVertexPosition")
-	gl.VertexAttribPointer(position, 3, gl.FLOAT, false, 4 * (3 + 3 + 2), 0)
+	gl.VertexAttribPointer(position, 3, gl.FLOAT, false, 4*(3+3+2), 0)
 	var normal int = gl.GetAttribLocation(shipShader, "aNormal")
-	gl.VertexAttribPointer(normal, 2, gl.FLOAT, false, 4 * (3 + 3 + 2), 3 * 4)
+	gl.VertexAttribPointer(normal, 2, gl.FLOAT, false, 4*(3+3+2), 3*4)
 	var uv int = gl.GetAttribLocation(shipShader, "aUV")
-	gl.VertexAttribPointer(uv, 2, gl.FLOAT, false, 4 * (3 + 3 + 2), (3 + 3) * 4)
+	gl.VertexAttribPointer(uv, 2, gl.FLOAT, false, 4*(3+3+2), (3+3)*4)
 
 	gl.BindBuffer(gl.ELEMENT_ARRAY_BUFFER, ship1Faces)
 	gl.DrawElements(gl.TRIANGLES, ship1Len, gl.UNSIGNED_SHORT, 0)

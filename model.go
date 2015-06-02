@@ -6,9 +6,9 @@ import (
 )
 
 type jsonModel struct {
-	Name string
+	Name     string
 	Vertices []float64
-	Indices []float64
+	Indices  []float64
 }
 
 // loadModelAsset takes the given modelAsset, loads the json file it specifies,

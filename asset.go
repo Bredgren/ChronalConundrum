@@ -37,9 +37,9 @@ type textureAsset struct {
 
 // Models
 var (
-	ship1Verts   *js.Object
-	ship1Faces   *js.Object
-	ship1Len     int
+	ship1Verts  *js.Object
+	ship1Faces  *js.Object
+	ship1Len    int
 	modelAssets = []modelAsset{
 		{"model/ship.json", &ship1Verts, &ship1Faces, &ship1Len},
 	}
