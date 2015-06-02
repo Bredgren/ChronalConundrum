@@ -7,8 +7,10 @@ import (
 // Shaders
 var (
 	uiShader     *js.Object
+	shipShader   *js.Object
 	shaderAssets = []shaderAsset{
 		{"ui.vert", "ui.frag", &uiShader},
+		{"ship.vert", "ship.frag", &shipShader},
 	}
 )
 
@@ -35,15 +37,19 @@ type textureAsset struct {
 
 // Models
 var (
-	shipModel   *js.Object
+	ship1Verts   *js.Object
+	ship1Faces   *js.Object
+	ship1Len     int
 	modelAssets = []modelAsset{
-		{"model/ship.json", &shipModel},
+		{"model/ship.json", &ship1Verts, &ship1Faces, &ship1Len},
 	}
 )
 
 type modelAsset struct {
 	jsonFile string
-	model    **js.Object
+	verts    **js.Object
+	faces    **js.Object
+	len      *int
 }
 
 // retrieveFile asyncronously gets the contents of the given file and returns it
