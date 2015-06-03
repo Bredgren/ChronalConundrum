@@ -3627,13 +3627,18 @@ $packages["encoding"] = (function() {
 	return $pkg;
 })();
 $packages["math"] = (function() {
-	var $pkg = {}, $init, js, arrayType, arrayType$1, arrayType$2, structType, arrayType$3, math, zero, posInf, negInf, nan, buf, pow10tab, Hypot, Inf, IsInf, IsNaN, NaN, Sqrt, Tan, init, Float32bits, Float32frombits, Float64bits, Float64frombits, hypot, init$1;
+	var $pkg = {}, $init, js, arrayType, arrayType$1, arrayType$2, structType, arrayType$3, math, zero, posInf, negInf, nan, buf, pow10tab, Cos, Hypot, Inf, IsInf, IsNaN, NaN, Sin, Sqrt, Tan, init, Float32bits, Float32frombits, Float64bits, Float64frombits, hypot, init$1;
 	js = $packages["github.com/gopherjs/gopherjs/js"];
 	arrayType = $arrayType($Uint32, 2);
 	arrayType$1 = $arrayType($Float32, 2);
 	arrayType$2 = $arrayType($Float64, 1);
 	structType = $structType([{prop: "uint32array", name: "uint32array", pkg: "math", typ: arrayType, tag: ""}, {prop: "float32array", name: "float32array", pkg: "math", typ: arrayType$1, tag: ""}, {prop: "float64array", name: "float64array", pkg: "math", typ: arrayType$2, tag: ""}]);
 	arrayType$3 = $arrayType($Float64, 70);
+	Cos = function(x) {
+		var $ptr, x;
+		return $parseFloat(math.cos(x));
+	};
+	$pkg.Cos = Cos;
 	Hypot = function(p, q) {
 		var $ptr, p, q;
 		return hypot(p, q);
@@ -3671,6 +3676,11 @@ $packages["math"] = (function() {
 		return nan;
 	};
 	$pkg.NaN = NaN;
+	Sin = function(x) {
+		var $ptr, x;
+		return $parseFloat(math.sin(x));
+	};
+	$pkg.Sin = Sin;
 	Sqrt = function(x) {
 		var $ptr, x;
 		return $parseFloat(math.sqrt(x));
@@ -21015,7 +21025,7 @@ $packages["text/tabwriter"] = (function() {
 	return $pkg;
 })();
 $packages["github.com/go-gl/mathgl/mgl32"] = (function() {
-	var $pkg = {}, $init, bytes, errors, fmt, math, sync, tabwriter, Mat2, Mat2x3, Mat2x4, Mat3x2, Mat3, Mat3x4, Mat4x2, Mat4x3, Mat4, Vec2, Vec3, Vec4, arrayType, arrayType$1, arrayType$2, sliceType$2, funcType, ptrType$3, ptrType$4, ptrType$5, ptrType$6, ptrType$7, ptrType$8, ptrType$9, ptrType$10, ptrType$11, DegToRad, Ident4, Mat2FromCols, Mat3FromCols, Mat4FromCols, Perspective, Translate3D, Scale3D, Abs, FloatEqual, FloatEqualThreshold;
+	var $pkg = {}, $init, bytes, errors, fmt, math, sync, tabwriter, Mat2, Mat2x3, Mat2x4, Mat3x2, Mat3, Mat3x4, Mat4x2, Mat4x3, Mat4, Vec2, Vec3, Vec4, arrayType, arrayType$1, arrayType$2, sliceType$2, funcType, ptrType$3, ptrType$4, ptrType$5, ptrType$6, ptrType$7, ptrType$8, ptrType$9, ptrType$10, ptrType$11, DegToRad, Ident4, Mat2FromCols, Mat3FromCols, Mat4FromCols, Perspective, Translate3D, Scale3D, HomogRotate3D, Abs, FloatEqual, FloatEqualThreshold;
 	bytes = $packages["bytes"];
 	errors = $packages["errors"];
 	fmt = $packages["fmt"];
@@ -23099,6 +23109,15 @@ $packages["github.com/go-gl/mathgl/mgl32"] = (function() {
 		return $toNativeArray($kindFloat32, [scaleX, 0, 0, 0, 0, scaleY, 0, 0, 0, 0, scaleZ, 0, 0, 0, 0, 1]);
 	};
 	$pkg.Scale3D = Scale3D;
+	HomogRotate3D = function(angle, axis) {
+		var $ptr, _tmp, _tmp$1, _tmp$2, _tmp$3, _tmp$4, angle, axis, c, k, s, x, y, z;
+		axis = $clone(axis, Vec3);
+		_tmp = axis[0]; _tmp$1 = axis[1]; _tmp$2 = axis[2]; x = _tmp; y = _tmp$1; z = _tmp$2;
+		_tmp$3 = $fround(math.Sin(angle)); _tmp$4 = $fround(math.Cos(angle)); s = _tmp$3; c = _tmp$4;
+		k = $fround(1 - c);
+		return $toNativeArray($kindFloat32, [$fround($fround($fround(x * x) * k) + c), $fround($fround($fround(x * y) * k) + $fround(z * s)), $fround($fround($fround(x * z) * k) - $fround(y * s)), 0, $fround($fround($fround(x * y) * k) - $fround(z * s)), $fround($fround($fround(y * y) * k) + c), $fround($fround($fround(y * z) * k) + $fround(x * s)), 0, $fround($fround($fround(x * z) * k) + $fround(y * s)), $fround($fround($fround(y * z) * k) - $fround(x * s)), $fround($fround($fround(z * z) * k) + c), 0, 0, 0, 0, 1]);
+	};
+	$pkg.HomogRotate3D = HomogRotate3D;
 	Abs = function(a) {
 		var $ptr, a;
 		if (a < 0) {
@@ -24992,7 +25011,7 @@ $packages["github.com/gopherjs/webgl"] = (function() {
 	return $pkg;
 })();
 $packages["main"] = (function() {
-	var $pkg = {}, $init, json, fsm, mgl32, js, webgl, time, shaderAsset, textureAsset, modelAsset, failedState, mainState, initState, inputType, mouse, loadState, loadBar, menuState, menuButton, jsonModel, ptrType, ptrType$1, sliceType, ptrType$2, ptrType$3, sliceType$1, sliceType$2, ptrType$4, funcType, funcType$1, funcType$2, chanType, sliceType$3, arrayType, funcType$3, sliceType$4, sliceType$5, chanType$1, ptrType$5, ptrType$6, ptrType$7, ptrType$8, ptrType$9, arrayType$1, ptrType$10, sliceType$6, uiShader, uiShader_ptr, shipShader, shipShader_ptr, shaderAssets, uiTexture, uiTexture_ptr, textureAssets, ship1Verts, ship1Verts_ptr, ship1Faces, ship1Faces_ptr, ship1Len, ship1Len_ptr, modelAssets, perspectiveMatrix, mvMatrix, mainFailedState, mainInitState, input, mainLoadState, document, canvas, gl, mainSm, mainMenuState, retrieveFile, retrieveImage, fail, initCanvas, initWebGl, onMouseMove, onMouseDown, onMouseUp, newLoadBar, clearWindow, onWindowResize, mainLoop, onBodyLoad, main, newMenuButton, loadModelAsset, createShader, loadShaderAsset, loadTextureAsset;
+	var $pkg = {}, $init, json, fsm, mgl32, js, webgl, time, shaderAsset, textureAsset, modelAsset, failedState, mainState, initState, inputType, mouse, loadState, loadBar, menuState, menuButton, jsonModel, ptrType, ptrType$1, sliceType, ptrType$2, ptrType$3, sliceType$1, sliceType$2, ptrType$4, funcType, funcType$1, funcType$2, chanType, sliceType$3, arrayType, funcType$3, sliceType$4, sliceType$5, chanType$1, ptrType$5, ptrType$6, ptrType$7, ptrType$8, ptrType$9, arrayType$1, ptrType$10, sliceType$6, uiShader, uiShader_ptr, shipShader, shipShader_ptr, shaderAssets, uiTexture, uiTexture_ptr, ship1Texture, ship1Texture_ptr, textureAssets, ship1Verts, ship1Verts_ptr, ship1Faces, ship1Faces_ptr, ship1Len, ship1Len_ptr, modelAssets, perspectiveMatrix, mvMatrix, mainFailedState, mainInitState, input, mainLoadState, document, canvas, gl, mainSm, mainMenuState, retrieveFile, retrieveImage, fail, initCanvas, initWebGl, onMouseMove, onMouseDown, onMouseUp, newLoadBar, clearWindow, onWindowResize, mainLoop, onBodyLoad, main, newMenuButton, loadModelAsset, createShader, loadShaderAsset, loadTextureAsset;
 	json = $packages["encoding/json"];
 	fsm = $packages["github.com/Bredgren/fsm"];
 	mgl32 = $packages["github.com/go-gl/mathgl/mgl32"];
@@ -25552,7 +25571,7 @@ $packages["main"] = (function() {
 		var $ptr, s, timestamp;
 		s = this;
 		s.drawButtons();
-		s.drawShip();
+		s.drawShip(timestamp);
 	};
 	menuState.prototype.Draw = function(timestamp) { return this.$val.Draw(timestamp); };
 	menuState.ptr.prototype.drawButtons = function() {
@@ -25569,8 +25588,8 @@ $packages["main"] = (function() {
 		}
 	};
 	menuState.prototype.drawButtons = function() { return this.$val.drawButtons(); };
-	menuState.ptr.prototype.drawShip = function() {
-		var $ptr, mvUniform, mvm, normAttr, normal, pUniform, pm, position, s, texAttr, uv, vertAttr;
+	menuState.ptr.prototype.drawShip = function(timestamp) {
+		var $ptr, mvUniform, mvm, normAttr, normal, pUniform, pm, position, s, texAttr, timestamp, uv, vertAttr;
 		s = this;
 		gl.UseProgram(shipShader);
 		vertAttr = gl.GetAttribLocation(shipShader, "aVertexPosition");
@@ -25581,13 +25600,16 @@ $packages["main"] = (function() {
 		gl.EnableVertexAttribArray(normAttr);
 		$copy(mvMatrix, mgl32.Ident4(), mgl32.Mat4);
 		$copy(mvMatrix, new mgl32.Mat4(mvMatrix).Mul4(mgl32.Translate3D(0, 0, -6)), mgl32.Mat4);
-		$copy(mvMatrix, new mgl32.Mat4(mvMatrix).Mul4(mgl32.Scale3D(0.15000000596046448, 0.15000000596046448, 0.15000000596046448)), mgl32.Mat4);
+		$copy(mvMatrix, new mgl32.Mat4(mvMatrix).Mul4(mgl32.Scale3D(0.10000000149011612, 0.10000000149011612, 0.10000000149011612)), mgl32.Mat4);
+		$copy(mvMatrix, new mgl32.Mat4(mvMatrix).Mul4(mgl32.HomogRotate3D(mgl32.DegToRad($fround($fround(timestamp) / 10)), $toNativeArray($kindFloat32, [0, 1, 0]))), mgl32.Mat4);
 		pUniform = gl.GetUniformLocation(shipShader, "uPMatrix");
 		pm = $clone($clone(perspectiveMatrix, arrayType), arrayType);
 		gl.UniformMatrix4fv(pUniform, false, new sliceType$3(pm));
 		mvUniform = gl.GetUniformLocation(shipShader, "uMVMatrix");
 		mvm = $clone($clone(mvMatrix, arrayType), arrayType);
 		gl.UniformMatrix4fv(mvUniform, false, new sliceType$3(mvm));
+		gl.BindTexture($parseInt(gl.Object.TEXTURE_2D) >> 0, ship1Texture);
+		gl.Uniform1i(gl.GetUniformLocation(shipShader, "uTexture"), $parseInt(ship1Texture) >> 0);
 		gl.BindBuffer($parseInt(gl.Object.ARRAY_BUFFER) >> 0, ship1Verts);
 		position = gl.GetAttribLocation(shipShader, "aVertexPosition");
 		gl.VertexAttribPointer(position, 3, $parseInt(gl.Object.FLOAT) >> 0, false, 32, 0);
@@ -25598,7 +25620,7 @@ $packages["main"] = (function() {
 		gl.BindBuffer($parseInt(gl.Object.ELEMENT_ARRAY_BUFFER) >> 0, ship1Faces);
 		gl.DrawElements($parseInt(gl.Object.TRIANGLES) >> 0, ship1Len, $parseInt(gl.Object.UNSIGNED_SHORT) >> 0, 0);
 	};
-	menuState.prototype.drawShip = function() { return this.$val.drawShip(); };
+	menuState.prototype.drawShip = function(timestamp) { return this.$val.drawShip(timestamp); };
 	newMenuButton = function(rect, img) {
 		var $ptr, buf, img, rect, tex, texAttr, texCoords, vertAttr, vertices;
 		img = $clone(img, mgl32.Vec4);
@@ -25759,7 +25781,7 @@ $packages["main"] = (function() {
 	ptrType$6.methods = [{prop: "Name", name: "Name", pkg: "", typ: $funcType([], [$String], false)}, {prop: "OnEnter", name: "OnEnter", pkg: "", typ: $funcType([], [], false)}, {prop: "OnExit", name: "OnExit", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([$Float64], [], false)}, {prop: "Draw", name: "Draw", pkg: "", typ: $funcType([$Float64], [], false)}];
 	ptrType$8.methods = [{prop: "Name", name: "Name", pkg: "", typ: $funcType([], [$String], false)}, {prop: "OnEnter", name: "OnEnter", pkg: "", typ: $funcType([], [], false)}, {prop: "OnExit", name: "OnExit", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([$Float64], [], false)}, {prop: "Draw", name: "Draw", pkg: "", typ: $funcType([$Float64], [], false)}];
 	ptrType$7.methods = [{prop: "draw", name: "draw", pkg: "main", typ: $funcType([$Float64, $Float64], [], false)}];
-	ptrType$10.methods = [{prop: "Name", name: "Name", pkg: "", typ: $funcType([], [$String], false)}, {prop: "OnEnter", name: "OnEnter", pkg: "", typ: $funcType([], [], false)}, {prop: "OnExit", name: "OnExit", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([$Float64], [], false)}, {prop: "Draw", name: "Draw", pkg: "", typ: $funcType([$Float64], [], false)}, {prop: "drawButtons", name: "drawButtons", pkg: "main", typ: $funcType([], [], false)}, {prop: "drawShip", name: "drawShip", pkg: "main", typ: $funcType([], [], false)}];
+	ptrType$10.methods = [{prop: "Name", name: "Name", pkg: "", typ: $funcType([], [$String], false)}, {prop: "OnEnter", name: "OnEnter", pkg: "", typ: $funcType([], [], false)}, {prop: "OnExit", name: "OnExit", pkg: "", typ: $funcType([], [], false)}, {prop: "Update", name: "Update", pkg: "", typ: $funcType([$Float64], [], false)}, {prop: "Draw", name: "Draw", pkg: "", typ: $funcType([$Float64], [], false)}, {prop: "drawButtons", name: "drawButtons", pkg: "main", typ: $funcType([], [], false)}, {prop: "drawShip", name: "drawShip", pkg: "main", typ: $funcType([$Float64], [], false)}];
 	ptrType$9.methods = [{prop: "draw", name: "draw", pkg: "main", typ: $funcType([], [], false)}];
 	shaderAsset.init([{prop: "vertFile", name: "vertFile", pkg: "main", typ: $String, tag: ""}, {prop: "fragFile", name: "fragFile", pkg: "main", typ: $String, tag: ""}, {prop: "shader", name: "shader", pkg: "main", typ: ptrType$3, tag: ""}]);
 	textureAsset.init([{prop: "textureFile", name: "textureFile", pkg: "main", typ: $String, tag: ""}, {prop: "texture", name: "texture", pkg: "main", typ: ptrType$3, tag: ""}]);
@@ -25786,6 +25808,7 @@ $packages["main"] = (function() {
 		uiShader = null;
 		shipShader = null;
 		uiTexture = null;
+		ship1Texture = null;
 		ship1Verts = null;
 		ship1Faces = null;
 		ship1Len = 0;
@@ -25796,7 +25819,7 @@ $packages["main"] = (function() {
 		gl = ptrType.nil;
 		mainSm = ptrType$1.nil;
 		shaderAssets = new sliceType([new shaderAsset.ptr("ui.vert", "ui.frag", (uiShader_ptr || (uiShader_ptr = new ptrType$3(function() { return uiShader; }, function($v) { uiShader = $v; })))), new shaderAsset.ptr("ship.vert", "ship.frag", (shipShader_ptr || (shipShader_ptr = new ptrType$3(function() { return shipShader; }, function($v) { shipShader = $v; }))))]);
-		textureAssets = new sliceType$1([new textureAsset.ptr("ui.png", (uiTexture_ptr || (uiTexture_ptr = new ptrType$3(function() { return uiTexture; }, function($v) { uiTexture = $v; }))))]);
+		textureAssets = new sliceType$1([new textureAsset.ptr("ui.png", (uiTexture_ptr || (uiTexture_ptr = new ptrType$3(function() { return uiTexture; }, function($v) { uiTexture = $v; })))), new textureAsset.ptr("model/ship1.png", (ship1Texture_ptr || (ship1Texture_ptr = new ptrType$3(function() { return ship1Texture; }, function($v) { ship1Texture = $v; }))))]);
 		modelAssets = new sliceType$2([new modelAsset.ptr("model/ship.json", (ship1Verts_ptr || (ship1Verts_ptr = new ptrType$3(function() { return ship1Verts; }, function($v) { ship1Verts = $v; }))), (ship1Faces_ptr || (ship1Faces_ptr = new ptrType$3(function() { return ship1Faces; }, function($v) { ship1Faces = $v; }))), (ship1Len_ptr || (ship1Len_ptr = new ptrType$4(function() { return ship1Len; }, function($v) { ship1Len = $v; }))))]);
 		$pkg.VIEW_ANGLE = mgl32.DegToRad(45);
 		$pkg.MENU_NEW_RECT = $toNativeArray($kindFloat32, [-0.75, 1, 0.5, 0.125]);

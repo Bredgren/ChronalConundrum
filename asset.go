@@ -23,8 +23,10 @@ type shaderAsset struct {
 // Textures
 var (
 	uiTexture     *js.Object
+	ship1Texture  *js.Object
 	textureAssets = []textureAsset{
 		{"ui.png", &uiTexture},
+		{"model/ship1.png", &ship1Texture},
 	}
 )
 

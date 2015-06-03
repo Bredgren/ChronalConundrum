@@ -35,7 +35,7 @@ func (s *menuState) Update(timestamp float64) {
 
 func (s *menuState) Draw(timestamp float64) {
 	s.drawButtons()
-	s.drawShip()
+	s.drawShip(timestamp)
 }
 
 func (s *menuState) drawButtons() {
@@ -46,7 +46,7 @@ func (s *menuState) drawButtons() {
 	}
 }
 
-func (s *menuState) drawShip() {
+func (s *menuState) drawShip(timestamp float64) {
 	gl.UseProgram(shipShader)
 
 	var vertAttr int = gl.GetAttribLocation(shipShader, "aVertexPosition")
@@ -58,8 +58,8 @@ func (s *menuState) drawShip() {
 
 	mvMatrix = mgl32.Ident4()
 	mvMatrix = mvMatrix.Mul4(mgl32.Translate3D(0.0, 0.0, -6.0))
-	mvMatrix = mvMatrix.Mul4(mgl32.Scale3D(0.15, 0.15, 0.15))
-	// mvMatrix = mvMatrix.Mul4(mgl32.HomogRotate3D(mgl32.DegToRad(20), mgl32.Vec3{1, 1, 0}))
+	mvMatrix = mvMatrix.Mul4(mgl32.Scale3D(0.1, 0.1, 0.1))
+	mvMatrix = mvMatrix.Mul4(mgl32.HomogRotate3D(mgl32.DegToRad(float32(timestamp) / 10.0), mgl32.Vec3{0, 1, 0}))
 
 	var pUniform *js.Object = gl.GetUniformLocation(shipShader, "uPMatrix")
 	pm := [16]float32(perspectiveMatrix)
@@ -68,6 +68,11 @@ func (s *menuState) drawShip() {
 	var mvUniform *js.Object = gl.GetUniformLocation(shipShader, "uMVMatrix")
 	mvm := [16]float32(mvMatrix)
 	gl.UniformMatrix4fv(mvUniform, false, mvm[:])
+
+	// gl.ActiveTexture(gl.TEXTURE0)
+	gl.BindTexture(gl.TEXTURE_2D, ship1Texture)
+	// TODO: does uiTexture.Int() actually work?
+	gl.Uniform1i(gl.GetUniformLocation(shipShader, "uTexture"), ship1Texture.Int())
 
 	// TODO cache attribs/uniforms, and precalculate stride/offset
 
