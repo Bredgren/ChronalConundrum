@@ -59,7 +59,7 @@ func (s *menuState) drawShip(timestamp float64) {
 	mvMatrix = mgl32.Ident4()
 	mvMatrix = mvMatrix.Mul4(mgl32.Translate3D(0.0, 0.0, -6.0))
 	mvMatrix = mvMatrix.Mul4(mgl32.Scale3D(0.1, 0.1, 0.1))
-	mvMatrix = mvMatrix.Mul4(mgl32.HomogRotate3D(mgl32.DegToRad(float32(timestamp) / 10.0), mgl32.Vec3{0, 1, 0}))
+	mvMatrix = mvMatrix.Mul4(mgl32.HomogRotate3D(mgl32.DegToRad(float32(timestamp)/10.0), mgl32.Vec3{0, 1, 0}))
 
 	var pUniform *js.Object = gl.GetUniformLocation(shipShader, "uPMatrix")
 	pm := [16]float32(perspectiveMatrix)
